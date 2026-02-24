@@ -2,7 +2,11 @@
   "name": "@hdo-teste-tecnico/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "postinstall": "npx prisma generate --schema ./prisma-database/schema.prisma && npx prisma generate --schema ./prisma-audit/schema.prisma",
+    "generate": "npx prisma generate --schema ./prisma-database/schema.prisma --config ./prisma-database/prisma.config.ts && npx prisma generate --schema ./prisma-audit/schema.prisma --config ./prisma-audit/prisma.config.ts",
+    "migrate": "npx prisma migrate dev --schema ./prisma-database/schema.prisma --config ./prisma-database/prisma.config.ts && npx prisma db push --schema ./prisma-audit/schema.prisma --config ./prisma-audit/prisma.config.ts"
+  },
   "private": true,
   "devDependencies": {
     "@angular-devkit/core": "^20.0.0",
@@ -30,9 +34,11 @@
     "@swc/helpers": "~0.5.18",
     "@types/express": "^4.17.21",
     "@types/jest": "^30.0.0",
-    "@types/node": "20.19.9",
+    "@types/node": "^20.19.33",
+    "@types/pg": "^8.16.0",
     "@typescript-eslint/utils": "^8.40.0",
     "angular-eslint": "^20.0.0",
+    "dotenv": "^17.3.1",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
@@ -43,6 +49,7 @@
     "jest-util": "^30.0.2",
     "nx": "22.5.2",
     "prettier": "^3.8.1",
+    "prisma": "^7.4.1",
     "react-refresh": "^0.10.0",
     "ts-jest": "^29.4.0",
     "ts-node": "10.9.1",
@@ -59,8 +66,11 @@
     "@angular/platform-browser": "^20.0.0",
     "@angular/platform-browser-dynamic": "^20.0.0",
     "@angular/router": "^20.0.0",
+    "@prisma/adapter-pg": "^7.4.1",
+    "@prisma/client": "^7.4.1",
     "axios": "^1.6.0",
     "express": "^4.21.2",
+    "pg": "^8.18.0",
     "rxjs": "~7.8.0"
   }
 }

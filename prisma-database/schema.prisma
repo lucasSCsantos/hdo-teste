@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../prisma-database/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  password     String
+  name         String
+  refreshToken String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@map("users")
+}
+
+model Patient {
+  id           Int           @id @default(autoincrement())
+  name         String
+  cpf          String        @unique
+  birthDate    DateTime
+  phone        String?
+  appointments Appointment[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@map("patients")
+}
+
+model Procedure {
+  id           Int           @id @default(autoincrement())
+  description  String
+  durationMin  Int           // em minutos, exemplo: 30, 90...
+  appointments Appointment[]
+  createdAt    DateTime      @default(now())
+
+  @@map("procedures")
+}
+
+model Appointment {
+  id              Int        @id @default(autoincrement())
+  patientId       Int
+  procedureId     Int
+  startTime       DateTime
+  endTime         DateTime   // startTime + durationMin
+  status          String     @default("SCHEDULED") // SCHEDULED, CANCELED
+  cancellationReason String? // Obrigatório se cancelado
+
+  patient         Patient    @relation(fields: [patientId], references: [id])
+  procedure       Procedure  @relation(fields: [procedureId], references: [id])
+
+  createdAt       DateTime   @default(now())
+
+  @@map("appointments")
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CANCELED
+}
