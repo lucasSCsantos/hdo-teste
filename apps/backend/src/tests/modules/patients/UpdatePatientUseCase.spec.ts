@@ -1,0 +1,28 @@
+import { UpdatePatientUseCase } from '../../../modules/patients/application/usecases/UpdatePatientUseCase';
+import { Patient } from '@hdo-teste-tecnico/shared/data-access';
+import FakePatientRepository from '../../fakes/fakePatientRepository';
+
+describe('UpdatePatientUseCase', () => {
+  it('should update patient if exists', async () => {
+    const repo = new FakePatientRepository();
+    const useCase = new UpdatePatientUseCase(repo as any);
+
+    const patient: Partial<Patient> = { id: 1, name: 'John Doe', birthDate: new Date('1990-01-01'), phone: '1234567890', cpf: '123.456.789-00' };
+    await repo.create(patient);
+
+    const updatedData: Partial<Patient> = { name: 'John Doe Updated', phone: '0987654321' };
+    const result = await useCase.execute(1, updatedData);
+
+    expect(result.name).toBe(updatedData.name);
+    expect(result.phone).toBe(updatedData.phone);
+  });
+
+  it('should throw an error if patient does not exist', async () => {
+    const repo = new FakePatientRepository();
+    const useCase = new UpdatePatientUseCase(repo as any);
+
+    const updatedData: Partial<Patient> = { name: 'John Doe Updated', phone: '0987654321' };
+
+    await expect(useCase.execute(99, updatedData)).rejects.toThrow('Patient not found');
+  });
+});
