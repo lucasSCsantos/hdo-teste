@@ -15,8 +15,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@hdo-teste-tecnico/prisma-client": ["./generated/prisma/client"],
-      "@hdo-teste-tecnico/data-access-postgres": ["modules/shared/data-access-postgres/src/index.ts"],
       "@hdo-teste-tecnico/mongo": ["libs/shared/mongo/src/index.ts"],
       "@hdo-teste-tecnico/prisma": ["libs/shared/prisma/src/index.ts"]
     },
