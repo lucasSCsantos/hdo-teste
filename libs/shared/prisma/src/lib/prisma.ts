@@ -1,4 +1,4 @@
-import { PrismaClient } from '@hdo-teste-tecnico/prisma-client';
+import { PrismaClient } from '@hdo-teste-tecnico/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 
 const globalPrisma = global as unknown as {

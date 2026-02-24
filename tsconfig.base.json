@@ -15,10 +15,13 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@hdo-teste-tecnico/mongo": ["libs/shared/mongo/src/index.ts"],
-      "@hdo-teste-tecnico/prisma": ["libs/shared/prisma/src/index.ts"]
+      "@hdo-teste-tecnico/prisma": ["./generated/prisma/"],
+      "@hdo-teste-tecnico/prisma/*": ["./generated/prisma/*"],
+      "@hdo-teste-tecnico/mongo-client": ["libs/shared/mongo/src/index.ts"],
+      "@hdo-teste-tecnico/prisma-client": ["libs/shared/prisma/src/index.ts"]
     },
     "types": ["node"]
   },
+  "include": ["**/*.ts", "generated/**/*", "libs/**/*"],
   "exclude": ["node_modules", "tmp"]
 }
