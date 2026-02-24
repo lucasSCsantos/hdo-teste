@@ -9,6 +9,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
+
     ports:
       - "5432:5432"
     volumes:
@@ -27,9 +28,15 @@ services:
     image: node:20-alpine
     container_name: backend
     working_dir: /app
+    environment:
+      POSTGRES_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
     volumes:
       - .:/app
-    command: npx nx serve backend
+    command: >
+      sh -c "([ -d node_modules ] || npm install) &&
+             npx nx run data-access:db-generate &&
+             npx nx run data-access:db-migrate &&
+             npx nx serve backend"
     depends_on:
       - postgres
       - mongodb
@@ -44,7 +51,8 @@ services:
     working_dir: /app
     volumes:
       - .:/app
-    command: npx nx serve frontend --host=0.0.0.0
+    command:
+     sh -c "npm install && npx nx serve frontend --host=0.0.0.0"
     depends_on:
       - backend
     ports:
