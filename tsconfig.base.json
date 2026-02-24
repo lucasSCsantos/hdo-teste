@@ -15,11 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@hdo-teste-tecnico/prisma": ["./generated/prisma/"],
-      "@hdo-teste-tecnico/prisma/*": ["./generated/prisma/*"],
-      "@hdo-teste-tecnico/mongo-client": ["libs/shared/mongo/src/index.ts"],
-      "@hdo-teste-tecnico/prisma-client": ["libs/shared/prisma/src/index.ts"]
+      "@hdo-teste-tecnico/shared/data-access": ["libs/shared/data-access/src/index.ts"]
     },
+    "typeRoots": ["node_modules/@types", "node_modules/@prisma/client"],
     "types": ["node"]
   },
   "include": ["**/*.ts", "generated/**/*", "libs/**/*"],
