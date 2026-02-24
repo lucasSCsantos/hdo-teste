@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { ListPatientsUseCase } from '../../application/usecases/ListPatientsUseCase';
+import { ListProceduresUseCase } from '../../application/usecases/ListProceduresUseCase';
 
-export class ListPatientsController {
-  constructor(private useCase: ListPatientsUseCase) {}
+export class ListProceduresController {
+  constructor(private useCase: ListProceduresUseCase) {}
 
   async handle(req: Request, res: Response) {
     const result = await this.useCase.execute();

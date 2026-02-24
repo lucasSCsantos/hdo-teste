@@ -15,7 +15,7 @@ describe('ListProceduresUseCase', () => {
 
     const result = await useCase.execute();
 
-    expect(result).toHaveLength(2);
+    expect(result).toHaveLength(3); // ja tem um procedure adicionado no array de procedures
     expect(result[0].id).toBe(1);
     expect(result[1].id).toBe(2);
   });

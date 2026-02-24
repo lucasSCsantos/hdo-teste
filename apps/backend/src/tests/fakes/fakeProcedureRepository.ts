@@ -1,14 +1,25 @@
 import { Procedure } from '@hdo-teste-tecnico/shared/data-access';
 
 export default class FakeProcedureRepository {
-  procedures: Procedure[] = [];
+  procedures: Procedure[] = [
+    {
+      id: 1,
+      description: 'Consulta',
+      durationMin: 30,
+      createdAt: new Date(),
+    },
+  ];
+
+  async findById(id: number) {
+    return this.procedures.find(p => p.id === id) || null;
+  }
 
   async create(data: any) {
     this.procedures.push(data);
     return data;
   }
 
-  async remove(id: number) {
+  async delete(id: number) {
     this.procedures = this.procedures.filter(p => p.id !== id);
   }
 

@@ -8,7 +8,7 @@ export default class FakePatientRepository {
     return data;
   }
 
-  async remove(id: number) {
+  async delete(id: number) {
     this.patients = this.patients.filter(p => p.id !== id);
   }
 

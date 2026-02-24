@@ -4,7 +4,7 @@ export default class FakeAppointmentRepository {
   appointments: Appointment[] = [];
 
   async findConflict(newAppointment: Appointment) {
-    return this.appointments.find(a => newAppointment.startTime < a.endTime && newAppointment.startTime > a.startTime) || null;
+    return this.appointments.find(a => newAppointment.startTime < a.endTime && newAppointment.startTime > a.startTime && newAppointment.procedureId === a.procedureId) || null;
   }
 
   async create(data: any) {
