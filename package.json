@@ -3,9 +3,6 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "postinstall": "npx prisma generate --schema ./prisma-database/schema.prisma && npx prisma generate --schema ./prisma-audit/schema.prisma",
-    "generate": "npx prisma generate --schema ./prisma-database/schema.prisma --config ./prisma-database/prisma.config.ts && npx prisma generate --schema ./prisma-audit/schema.prisma --config ./prisma-audit/prisma.config.ts",
-    "migrate": "npx prisma migrate dev --schema ./prisma-database/schema.prisma --config ./prisma-database/prisma.config.ts && npx prisma db push --schema ./prisma-audit/schema.prisma --config ./prisma-audit/prisma.config.ts"
   },
   "private": true,
   "devDependencies": {
@@ -34,6 +31,7 @@
     "@swc/helpers": "~0.5.18",
     "@types/express": "^4.17.21",
     "@types/jest": "^30.0.0",
+    "@types/mongoose": "^5.11.96",
     "@types/node": "^20.19.33",
     "@types/pg": "^8.16.0",
     "@typescript-eslint/utils": "^8.40.0",
@@ -47,6 +45,7 @@
     "jest-environment-node": "^30.0.2",
     "jest-preset-angular": "~16.0.0",
     "jest-util": "^30.0.2",
+    "jsonc-eslint-parser": "^2.1.0",
     "nx": "22.5.2",
     "prettier": "^3.8.1",
     "prisma": "^7.4.1",
@@ -54,6 +53,7 @@
     "ts-jest": "^29.4.0",
     "ts-node": "10.9.1",
     "tslib": "^2.3.0",
+    "tsx": "^4.21.0",
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.40.0",
     "webpack-cli": "^5.1.4"
@@ -70,6 +70,7 @@
     "@prisma/client": "^7.4.1",
     "axios": "^1.6.0",
     "express": "^4.21.2",
+    "mongoose": "^9.2.2",
     "pg": "^8.18.0",
     "rxjs": "~7.8.0"
   }
