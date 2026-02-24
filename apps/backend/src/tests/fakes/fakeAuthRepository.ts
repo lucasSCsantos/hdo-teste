@@ -1,7 +1,17 @@
 import { User } from '@hdo-teste-tecnico/shared/data-access';
 
 export default class FakeAuthRepository {
-  users: User[] = [];
+  users: User[] = [
+    {
+      id: 1,
+      email: 'test@example.com',
+      password: 'password123',
+      name: 'Test User',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      refreshToken: null,
+    },
+  ];
 
   async login(data: any) {
     const user = this.users.find(u => u.email === data.email && u.password === data.password);
@@ -11,7 +21,6 @@ export default class FakeAuthRepository {
     return user;
   }
 
-  async refresh(data: any) {
-    // For simplicity, this fake doesn't implement token refresh logic
-  }
+  // async refresh(data: any) {
+  // }
 }

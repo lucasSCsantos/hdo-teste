@@ -2,7 +2,7 @@ import { CancelAppointment } from '../../../modules/appointments/application/use
 import FakeAppointmentRepository from '../../fakes/fakeAppointmentRepository';
 import { Appointment } from '@hdo-teste-tecnico/shared/data-access';
 
-describe('CreateAppointmentUseCase', () => {
+describe('CancelAppointmentUseCase', () => {
   it('should cancel an appointment with reason', async () => {
     const repo = new FakeAppointmentRepository();
     const useCase = new CancelAppointment(repo as any);

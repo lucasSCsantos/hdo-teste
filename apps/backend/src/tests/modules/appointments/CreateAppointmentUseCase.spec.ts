@@ -1,4 +1,4 @@
-import { CreateAppointmentUseCase } from '../../../modules/appointments/application/usecases/CancelAppointmentUseCase';
+import { CreateAppointmentUseCase } from '../../../modules/appointments/application/usecases/CreateAppointmentUseCase';
 import FakeAppointmentRepository from '../../fakes/fakeAppointmentRepository';
 import { Appointment } from '@hdo-teste-tecnico/shared/data-access';
 
