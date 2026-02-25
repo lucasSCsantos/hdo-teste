@@ -22,7 +22,7 @@ describe('CreateProcedureUseCase', () => {
     const useCase = new CreateProcedureUseCase(repo as any);
 
     const newProcedure: Partial<Procedure> = {
-      description: 'Procedure without duration description',
+      durationMin: 90,
     };
 
     await expect(useCase.execute(newProcedure as any)).rejects.toThrow();

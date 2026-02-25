@@ -15,8 +15,11 @@ export default class FakeProcedureRepository {
   }
 
   async create(data: any) {
-    this.procedures.push(data);
-    return data;
+    this.procedures.push({
+      ...data,
+      id: this.procedures.length + 1,
+    });
+    return { ...data, id: this.procedures.length };
   }
 
   async delete(id: number) {

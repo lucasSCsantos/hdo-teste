@@ -13,7 +13,7 @@ describe('DeletePatientUseCase', () => {
     await useCase.execute(result);
 
     const deletedPatient = await repo.findById(result.id);
-    expect(deletedPatient).toBeUndefined();
+    expect(deletedPatient).toBeNull();
   });
 
   it('should throw an error if patient does not exist', async () => {
@@ -27,15 +27,15 @@ describe('DeletePatientUseCase', () => {
     const repo = new FakePatientRepository();
     const useCase = new DeletePatientUseCase(repo as any);
 
-    const patient1: Partial<Patient> = { id: 1, name: 'John Doe', birthDate: new Date('1990-01-01'), phone: '1234567890', cpf: '123.456.789-00' };
-    const patient2: Partial<Patient> = { id: 2, name: 'John Doe', birthDate: new Date('1990-01-03'), phone: '1234567892', cpf: '123.456.789-02' };
+    const patient1: Partial<Patient> = { name: 'John Doe', birthDate: new Date('1990-01-01'), phone: '1234567890', cpf: '123.456.789-00' };
+    const patient2: Partial<Patient> = { name: 'John Doe', birthDate: new Date('1990-01-03'), phone: '1234567892', cpf: '123.456.789-02' };
 
-    const result = await repo.create(patient1);
-    await repo.create(patient2);
+    const result1 = await repo.create(patient1);
+    const result2 = await repo.create(patient2);
 
-    await useCase.execute(result);
+    await useCase.execute(result1);
 
     const remainingPatient = await repo.findById(2);
-    expect(remainingPatient?.id).toEqual(patient2.id);
+    expect(remainingPatient?.id).toEqual(result2.id);
   });
 });

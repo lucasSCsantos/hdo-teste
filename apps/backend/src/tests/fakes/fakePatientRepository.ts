@@ -4,8 +4,11 @@ export default class FakePatientRepository {
   patients: Patient[] = [];
 
   async create(data: any) {
-    this.patients.push(data);
-    return data;
+    this.patients.push({
+      ...data,
+      id: this.patients.length + 1,
+    });
+    return { ...data, id: this.patients.length };
   }
 
   async delete(id: number) {

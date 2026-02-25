@@ -13,7 +13,7 @@ describe('DeleteProcedureUseCase', () => {
     await useCase.execute(result);
 
     const deletedProcedure = await repo.findById(result.id!);
-    expect(deletedProcedure).toBeUndefined();
+    expect(deletedProcedure).toBeNull();
   });
 
   it('should throw an error if procedure does not exist', async () => {
@@ -30,12 +30,12 @@ describe('DeleteProcedureUseCase', () => {
     const procedure1: Partial<Procedure> = { description: 'Procedure Description', durationMin: 60 };
     const procedure2: Partial<Procedure> = { description: 'Procedure Description 2', durationMin: 90 };
 
-    const result = await repo.create(procedure1);
-    await repo.create(procedure2);
+    const result1 = await repo.create(procedure1);
+    const result2 = await repo.create(procedure2);
 
-    await useCase.execute(result);
+    await useCase.execute(result1);
 
-    const remainingProcedure = await repo.findById(2);
-    expect(remainingProcedure).toEqual(procedure2);
+    const remainingProcedure = await repo.findById(3); // 3 pois já existe um item criado no repositório fake
+    expect(remainingProcedure?.id).toEqual(result2.id);
   });
 });

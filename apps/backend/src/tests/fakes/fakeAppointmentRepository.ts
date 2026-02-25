@@ -8,12 +8,20 @@ export default class FakeAppointmentRepository {
   }
 
   async create(data: any) {
-    this.appointments.push(data);
-    return data;
+    this.appointments.push({
+      ...data,
+      id: this.appointments.length + 1,
+    });
+    return { ...data, id: this.appointments.length };
   }
 
-  async cancel(id: number) {
-    this.appointments = this.appointments.filter(a => a.id !== id);
+  async cancel(id: number, cancellationReason: string) {
+    const appointment = this.appointments.find(a => a.id === id);
+
+    if (appointment) {
+      appointment.cancellationReason = cancellationReason;
+      return appointment;
+    }
   }
 
   async list() {

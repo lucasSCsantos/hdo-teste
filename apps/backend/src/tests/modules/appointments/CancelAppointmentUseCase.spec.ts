@@ -17,7 +17,7 @@ describe('CancelAppointmentUseCase', () => {
     const appointment = await repo.create(newAppointment);
 
     const result = await useCase.execute(appointment as any);
-    console.log(result);
+
     expect(result).toBeDefined();
   });
 

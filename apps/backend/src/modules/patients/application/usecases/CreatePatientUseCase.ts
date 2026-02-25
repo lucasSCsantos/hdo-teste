@@ -13,13 +13,22 @@ export class CreatePatientUseCase {
   constructor(private repo: IPatientRepository) {}
 
   async execute(data: InputDTO) {
-    const patient = await this.repo.create({
-      birthDate: data.birthDate,
-      cpf: data.cpf,
-      name: data.name,
-      phone: data.phone,
-    });
+    if (!data.name.trim()) {
+      throw new Error('Name cannot be empty');
+      // throw new AppError('Name cannot be empty', 400);
+    }
 
-    return patient;
+    try {
+      const patient = await this.repo.create({
+        birthDate: data.birthDate,
+        cpf: data.cpf,
+        name: data.name,
+        phone: data.phone,
+      });
+      return patient;
+    } catch (err) {
+      throw new Error('Could not delete patient. Database error.');
+      // throw new AppError('Could not delete procedure. Database error.', 500);
+    }
   }
 }
