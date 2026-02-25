@@ -5,7 +5,8 @@ export class DeletePatientController {
   constructor(private useCase: DeletePatientUseCase) {}
 
   async handle(req: Request, res: Response) {
-    const result = await this.useCase.execute(req.body);
+    const { id } = req.params;
+    const result = await this.useCase.execute({ id: +id });
     return res.status(204).json(result);
   }
 }

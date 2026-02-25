@@ -5,7 +5,8 @@ export class CreateAppointmentController {
   constructor(private useCase: CreateAppointmentUseCase) {}
 
   async handle(req: Request, res: Response) {
-    const result = await this.useCase.execute(req.body);
+    const userId = req.user!.id;
+    const result = await this.useCase.execute({ ...req.body, userId: +userId });
     return res.status(201).json(result);
   }
 }

@@ -15,7 +15,7 @@ describe('UpdateProcedureUseCase', () => {
     await repo.create(procedure);
 
     const updatedData: Partial<Procedure> = { durationMin: 90 };
-    const result = await useCase.execute(1, updatedData);
+    const result = await useCase.execute({ id: 1, ...updatedData });
 
     expect(result.durationMin).toBe(updatedData.durationMin);
   });
@@ -26,7 +26,7 @@ describe('UpdateProcedureUseCase', () => {
 
     const updatedData: Partial<Procedure> = { durationMin: 30 };
 
-    await expect(useCase.execute(99, updatedData)).rejects.toBeInstanceOf(AppError);
-    await expect(useCase.execute(99, updatedData)).rejects.toEqual(new AppError('Procedure not found', 404));
+    await expect(useCase.execute({ id: 99, ...updatedData })).rejects.toBeInstanceOf(AppError);
+    await expect(useCase.execute({ id: 99, ...updatedData })).rejects.toEqual(new AppError('Procedure not found', 404));
   });
 });

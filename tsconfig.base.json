@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@hdo-teste-tecnico/shared/data-access": ["libs/shared/data-access/src/index.ts"]
+      "@hdo-teste-tecnico/shared/data-access": ["libs/shared/data-access/src/index.ts"],
+      "@hdo-teste-tecnico/shared/data-audit": ["libs/shared/data-audit/src/index.ts"]
     },
     "typeRoots": ["node_modules/@types", "node_modules/@prisma/client"],
     "types": ["node"]

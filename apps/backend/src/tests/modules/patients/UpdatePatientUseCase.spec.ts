@@ -12,7 +12,7 @@ describe('UpdatePatientUseCase', () => {
     await repo.create(patient);
 
     const updatedData: Partial<Patient> = { name: 'John Doe Updated', phone: '0987654321' };
-    const result = await useCase.execute(1, updatedData);
+    const result = await useCase.execute({ id: 1, ...updatedData });
 
     expect(result.name).toBe(updatedData.name);
     expect(result.phone).toBe(updatedData.phone);
@@ -24,7 +24,7 @@ describe('UpdatePatientUseCase', () => {
 
     const updatedData: Partial<Patient> = { name: 'John Doe Updated', phone: '0987654321' };
 
-    await expect(useCase.execute(99, updatedData)).rejects.toBeInstanceOf(AppError);
-    await expect(useCase.execute(99, updatedData)).rejects.toEqual(new AppError('Patient not found', 404));
+    await expect(useCase.execute({ id: 99, ...updatedData })).rejects.toBeInstanceOf(AppError);
+    await expect(useCase.execute({ id: 99, ...updatedData })).rejects.toEqual(new AppError('Patient not found', 404));
   });
 });
