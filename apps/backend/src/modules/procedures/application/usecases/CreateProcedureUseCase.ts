@@ -1,6 +1,6 @@
 import { Procedure } from '@hdo-teste-tecnico/shared/data-access';
 import { IProcedureRepository } from '../../domain/repositories/IProcedureRepository';
-// import { AppError } from '../../../shared/errors/AppError';
+import { AppError } from '../../../../shared/errors/AppError';
 
 interface InputDTO extends Partial<Procedure> {
   description: string;
@@ -12,8 +12,7 @@ export class CreateProcedureUseCase {
 
   async execute(data: InputDTO) {
     if (!data.description.trim()) {
-      throw new Error('Description cannot be empty');
-      // throw new AppError('Description cannot be empty', 400);
+      throw new AppError('Description cannot be empty', 400);
     }
 
     try {
@@ -24,8 +23,7 @@ export class CreateProcedureUseCase {
 
       return procedure;
     } catch (err) {
-      throw new Error('Could not delete procedure. Database error.');
-      // throw new AppError('Could not delete procedure. Database error.', 500);
+      throw new AppError('Could not delete procedure. Database error.', 500);
     }
   }
 }

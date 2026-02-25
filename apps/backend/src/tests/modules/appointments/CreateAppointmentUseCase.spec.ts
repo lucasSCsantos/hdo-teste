@@ -2,6 +2,7 @@ import { CreateAppointmentUseCase } from '../../../modules/appointments/applicat
 import FakeAppointmentRepository from '../../fakes/fakeAppointmentRepository';
 import { Appointment } from '@hdo-teste-tecnico/shared/data-access';
 import FakeProcedureRepository from '../../fakes/fakeProcedureRepository';
+import { AppError } from '../../../shared/errors/AppError';
 
 describe('CreateAppointmentUseCase', () => {
   it('should create appointment if no conflict', async () => {
@@ -39,6 +40,6 @@ describe('CreateAppointmentUseCase', () => {
 
     await useCase.execute(newAppointment1 as any);
 
-    await expect(useCase.execute(newAppointment2 as any)).rejects.toThrow();
+    await expect(useCase.execute(newAppointment2 as any)).rejects.toBeInstanceOf(AppError);
   });
 });

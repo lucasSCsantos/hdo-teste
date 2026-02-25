@@ -5,4 +5,5 @@ export interface IPatientRepository {
   create(data: Partial<Patient>): Promise<Patient>;
   delete(id: number): Promise<Patient | null>;
   list(): Promise<Patient[]>;
+  update(id: number, data: Partial<Patient>): Promise<Patient>;
 }

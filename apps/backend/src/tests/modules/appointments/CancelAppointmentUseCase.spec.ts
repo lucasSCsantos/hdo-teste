@@ -1,3 +1,4 @@
+import { AppError } from '../../../shared/errors/AppError';
 import { CancelAppointmentUseCase } from '../../../modules/appointments/application/usecases/CancelAppointmentUseCase';
 import FakeAppointmentRepository from '../../fakes/fakeAppointmentRepository';
 import { Appointment } from '@hdo-teste-tecnico/shared/data-access';
@@ -31,6 +32,6 @@ describe('CancelAppointmentUseCase', () => {
       startTime: new Date('2026-02-27T10:30:00'),
     };
 
-    await expect(useCase.execute(newAppointment as any)).rejects.toThrow();
+    await expect(useCase.execute(newAppointment as any)).rejects.toBeInstanceOf(AppError);
   });
 });

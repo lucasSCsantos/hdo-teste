@@ -27,4 +27,14 @@ export class PrismaProcedureRepository implements IProcedureRepository {
   async list() {
     return prisma.procedure.findMany();
   }
+
+  async update(id: number, data: any) {
+    return prisma.procedure.update({
+      where: { id },
+      data: {
+        description: data.description,
+        durationMin: data.durationMinute,
+      },
+    });
+  }
 }

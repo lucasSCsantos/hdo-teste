@@ -1,3 +1,4 @@
+import { AppError } from '../../../shared/errors/AppError';
 import { DeleteProcedureUseCase } from '../../../modules/procedures/application/usecases/DeleteProcedureUseCase';
 import FakeProcedureRepository from '../../fakes/fakeProcedureRepository';
 import { Procedure } from '@hdo-teste-tecnico/shared/data-access';
@@ -20,7 +21,8 @@ describe('DeleteProcedureUseCase', () => {
     const repo = new FakeProcedureRepository();
     const useCase = new DeleteProcedureUseCase(repo as any);
 
-    await expect(useCase.execute({ id: 99 })).rejects.toThrow('Procedure not found');
+    await expect(useCase.execute({ id: 99 })).rejects.toBeInstanceOf(AppError);
+    await expect(useCase.execute({ id: 99 })).rejects.toEqual(new AppError('Procedure not found', 404));
   });
 
   it('should not delete other procedures', async () => {

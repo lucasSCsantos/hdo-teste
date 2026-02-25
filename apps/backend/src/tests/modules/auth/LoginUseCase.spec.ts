@@ -1,32 +1,40 @@
-import { LoginUseCase } from '../../../modules/appointments/application/usecases/LoginUseCase';
+import { AppError } from '../../../shared/errors/AppError';
+import { LoginUseCase } from '../../../modules/auth/application/usecases/LoginUseCase';
 import FakeAuthRepository from '../../fakes/fakeAuthRepository';
+import FakeHashService from '../../fakes/fakeHashService';
+import FakeTokenService from '../../fakes/fakeTokenService';
 import { User } from '@hdo-teste-tecnico/shared/data-access';
 
 describe('LoginUseCase', () => {
   it('should login successfully with valid credentials', async () => {
     const repo = new FakeAuthRepository();
-    const useCase = new LoginUseCase(repo as any);
+    const hash = new FakeHashService();
+    const token = new FakeTokenService();
+
+    const useCase = new LoginUseCase(repo as any, hash as any, token as any);
 
     const credentials: Partial<User> = {
       email: 'test@example.com',
       password: 'password123',
     };
 
-    const result = await useCase.execute(credentials);
+    const result = await useCase.execute(credentials as User);
 
     expect(result.token).toBeDefined();
-    expect(result.user).toBeDefined();
   });
 
   it('should throw error with invalid credentials', async () => {
     const repo = new FakeAuthRepository();
-    const useCase = new LoginUseCase(repo as any);
+    const hash = new FakeHashService();
+    const token = new FakeTokenService();
+
+    const useCase = new LoginUseCase(repo as any, hash as any, token as any);
 
     const credentials: Partial<User> = {
       email: 'invalid@example.com',
       password: 'wrongpassword',
     };
 
-    await expect(useCase.execute(credentials)).rejects.toThrow();
+    await expect(useCase.execute(credentials as User)).rejects.toBeInstanceOf(AppError);
   });
 });

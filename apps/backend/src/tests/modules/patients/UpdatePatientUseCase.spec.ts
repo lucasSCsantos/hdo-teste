@@ -1,6 +1,7 @@
 import { UpdatePatientUseCase } from '../../../modules/patients/application/usecases/UpdatePatientUseCase';
 import { Patient } from '@hdo-teste-tecnico/shared/data-access';
 import FakePatientRepository from '../../fakes/fakePatientRepository';
+import { AppError } from '../../../shared/errors/AppError';
 
 describe('UpdatePatientUseCase', () => {
   it('should update patient if exists', async () => {
@@ -23,6 +24,7 @@ describe('UpdatePatientUseCase', () => {
 
     const updatedData: Partial<Patient> = { name: 'John Doe Updated', phone: '0987654321' };
 
-    await expect(useCase.execute(99, updatedData)).rejects.toThrow('Patient not found');
+    await expect(useCase.execute(99, updatedData)).rejects.toBeInstanceOf(AppError);
+    await expect(useCase.execute(99, updatedData)).rejects.toEqual(new AppError('Patient not found', 404));
   });
 });

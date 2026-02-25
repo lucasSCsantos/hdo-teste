@@ -1,4 +1,5 @@
 import { Procedure } from '@hdo-teste-tecnico/shared/data-access';
+import { AppError } from '../../shared/errors/AppError';
 
 export default class FakeProcedureRepository {
   procedures: Procedure[] = [
@@ -30,7 +31,7 @@ export default class FakeProcedureRepository {
     const procedureIndex = this.procedures.findIndex(p => p.id === id);
 
     if (procedureIndex === -1) {
-      throw new Error('Procedure not found');
+      throw new AppError('Procedure not found', 404);
     }
 
     this.procedures[procedureIndex] = { ...this.procedures[procedureIndex], ...data };

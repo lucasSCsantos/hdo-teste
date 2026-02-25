@@ -1,3 +1,4 @@
+import { AppError } from '../../../shared/errors/AppError';
 import { DeletePatientUseCase } from '../../../modules/patients/application/usecases/DeletePatientUseCase';
 import FakePatientRepository from '../../fakes/fakePatientRepository';
 import { Patient } from '@hdo-teste-tecnico/shared/data-access';
@@ -20,7 +21,8 @@ describe('DeletePatientUseCase', () => {
     const repo = new FakePatientRepository();
     const useCase = new DeletePatientUseCase(repo as any);
 
-    await expect(useCase.execute({ id: 99 })).rejects.toThrow('Patient not found');
+    await expect(useCase.execute({ id: 99 })).rejects.toBeInstanceOf(AppError);
+    await expect(useCase.execute({ id: 99 })).rejects.toEqual(new AppError('Patient not found', 404));
   });
 
   it('should not delete other patients', async () => {

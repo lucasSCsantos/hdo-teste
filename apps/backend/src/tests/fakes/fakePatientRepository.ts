@@ -1,4 +1,5 @@
 import { Patient } from '@hdo-teste-tecnico/shared/data-access';
+import { AppError } from '../../shared/errors/AppError';
 
 export default class FakePatientRepository {
   patients: Patient[] = [];
@@ -19,7 +20,7 @@ export default class FakePatientRepository {
     const patientIndex = this.patients.findIndex(p => p.id === id);
 
     if (patientIndex === -1) {
-      throw new Error('Patient not found');
+      throw new AppError('Patient not found', 404);
     }
 
     this.patients[patientIndex] = { ...this.patients[patientIndex], ...data };

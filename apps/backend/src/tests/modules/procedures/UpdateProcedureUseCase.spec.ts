@@ -1,6 +1,7 @@
 import { UpdateProcedureUseCase } from '../../../modules/procedures/application/usecases/UpdateProcedureUseCase';
 import { Procedure } from '@hdo-teste-tecnico/shared/data-access';
 import FakeProcedureRepository from '../../fakes/fakeProcedureRepository';
+import { AppError } from '../../../shared/errors/AppError';
 
 describe('UpdateProcedureUseCase', () => {
   it('should update procedure if exists', async () => {
@@ -25,6 +26,7 @@ describe('UpdateProcedureUseCase', () => {
 
     const updatedData: Partial<Procedure> = { durationMin: 30 };
 
-    await expect(useCase.execute(99, updatedData)).rejects.toThrow('Procedure not found');
+    await expect(useCase.execute(99, updatedData)).rejects.toBeInstanceOf(AppError);
+    await expect(useCase.execute(99, updatedData)).rejects.toEqual(new AppError('Procedure not found', 404));
   });
 });

@@ -1,4 +1,5 @@
 import { User } from '@hdo-teste-tecnico/shared/data-access';
+import { AppError } from '../../shared/errors/AppError';
 
 export default class FakeAuthRepository {
   users: User[] = [
@@ -13,14 +14,11 @@ export default class FakeAuthRepository {
     },
   ];
 
-  async login(data: any) {
-    const user = this.users.find(u => u.email === data.email && u.password === data.password);
+  async findByEmail(email: string) {
+    const user = this.users.find(u => u.email === email);
     if (!user) {
-      throw new Error('Invalid credentials');
+      throw new AppError('Invalid credentials', 401);
     }
     return user;
   }
-
-  // async refresh(data: any) {
-  // }
 }

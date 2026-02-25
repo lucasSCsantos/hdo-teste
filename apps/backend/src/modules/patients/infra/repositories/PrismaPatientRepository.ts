@@ -28,4 +28,16 @@ export class PrismaPatientRepository implements IPatientRepository {
   async list() {
     return prisma.patient.findMany();
   }
+
+  async update(id: number, data: any) {
+    return prisma.patient.update({
+      where: { id },
+      data: {
+        name: data.name,
+        birthDate: data.birthDate,
+        phone: data.phone,
+        cpf: data.cpf,
+      },
+    });
+  }
 }

@@ -1,21 +1,30 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
+import { app } from './app';
+import { prisma } from './shared/database/prismaClient';
 
-import express from 'express';
-import * as path from 'path';
+const PORT = process.env.PORT || 3333;
 
-const app = express();
+async function bootstrap() {
+  try {
+    await prisma.$connect();
+    console.log('Database connected successfully');
 
-app.use('/assets', express.static(path.join(__dirname, 'assets')));
+    const server = app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
+    });
 
-app.get('/api', (req, res) => {
-  res.send({ message: 'Welcome to backend!' });
-});
+    const handleExit = async () => {
+      await prisma.$disconnect();
+      server.close();
+      process.exit(0);
+    };
 
-const port = process.env.PORT || 3333;
-const server = app.listen(port, () => {
-  console.log(`Listening at http://localhost:${port}/api`);
-});
-server.on('error', console.error);
+    process.on('SIGINT', handleExit);
+    process.on('SIGTERM', handleExit);
+  } catch (error) {
+    console.error('Error during application bootstrap:', error);
+    await prisma.$disconnect();
+    process.exit(1);
+  }
+}
+
+bootstrap();
