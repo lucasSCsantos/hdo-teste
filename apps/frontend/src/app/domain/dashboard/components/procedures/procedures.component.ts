@@ -12,8 +12,8 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { PatientsApi } from '../../apis/procedures.api';
-import { Patient, PatientFormValue } from '../../interfaces/procedures.interface';
+import { ProceduresApi } from '../../apis/procedures/procedures.api';
+import { Procedure, ProcedureFormValue } from '../../interfaces/procedures.interface';
 import { NzFlexModule } from 'ng-zorro-antd/flex';
 @Component({
   selector: 'app-procedures',
@@ -34,15 +34,15 @@ import { NzFlexModule } from 'ng-zorro-antd/flex';
   ],
   templateUrl: './procedures.component.html',
 })
-export class PatientsComponent implements OnInit {
-  private api = inject(PatientsApi);
+export class ProceduresComponent implements OnInit {
+  private api = inject(ProceduresApi);
   private notificationService = inject(NzNotificationService);
   private modalService = inject(NzModalService);
   private fb = inject(FormBuilder);
 
   // table state
   loading = signal(false);
-  items = signal<Patient[]>([]);
+  items = signal<Procedure[]>([]);
   total = signal(0);
   pageIndex = signal(1);
   pageSize = signal(10);
@@ -51,13 +51,12 @@ export class PatientsComponent implements OnInit {
   // modal state
   isModalOpen = signal(false);
   isSaving = signal(false);
-  editing = signal<Patient | null>(null);
-  modalTitle = computed(() => (this.editing() ? 'Editar paciente' : 'Novo paciente'));
+  editing = signal<Procedure | null>(null);
+  modalTitle = computed(() => (this.editing() ? 'Editar procedimento' : 'Novo procedimento'));
 
   form = this.fb.nonNullable.group({
-    name: ['', [Validators.required, Validators.minLength(2)]],
-    document: [null as string | null],
-    phone: [null as string | null],
+    description: ['', [Validators.required, Validators.minLength(2)]],
+    durationMin: [null as number | null],
   });
 
   ngOnInit(): void {
@@ -78,7 +77,7 @@ export class PatientsComponent implements OnInit {
         error: error => {
           console.error(error);
           this.loading.set(false);
-          this.notificationService.error('Erro', 'Falha ao carregar pacientes.');
+          this.notificationService.error('Erro', 'Falha ao carregar procedimentos.');
         },
       });
   }
@@ -97,15 +96,14 @@ export class PatientsComponent implements OnInit {
   // }
   openCreate(): void {
     this.editing.set(null);
-    this.form.reset({ name: '', phone: null, document: '' });
+    this.form.reset({ description: '', durationMin: 0 });
     this.isModalOpen.set(true);
   }
-  openEdit(row: Patient): void {
+  openEdit(row: Procedure): void {
     this.editing.set(row);
     this.form.reset({
-      name: row.name,
-      document: row.document,
-      phone: row.phone ?? null,
+      description: row.description,
+      durationMin: row.durationMin,
     });
     this.isModalOpen.set(true);
   }
@@ -118,7 +116,7 @@ export class PatientsComponent implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
-    const payload = this.form.getRawValue() as PatientFormValue;
+    const payload = this.form.getRawValue() as ProcedureFormValue;
     const editing = this.editing();
     this.isSaving.set(true);
     const req$ = editing ? this.api.update(editing.id, payload) : this.api.create(payload);
@@ -126,24 +124,24 @@ export class PatientsComponent implements OnInit {
       next: () => {
         this.isSaving.set(false);
         this.isModalOpen.set(false);
-        this.notificationService.success('Sucesso', editing ? 'Paciente atualizado.' : 'Paciente criado.');
+        this.notificationService.success('Sucesso', editing ? 'Procedimento atualizado.' : 'Procedimento criado.');
         this.load();
       },
       error: () => {
         this.isSaving.set(false);
-        this.notificationService.error('Erro', 'Falha ao salvar paciente.');
+        this.notificationService.error('Erro', 'Falha ao salvar procedimento.');
       },
     });
   }
-  confirmDelete(row: Patient): void {
+  confirmDelete(row: Procedure): void {
     this.api.delete(row.id).subscribe({
       next: () => {
-        this.notificationService.success('Sucesso', 'Paciente removido.');
+        this.notificationService.success('Sucesso', 'Procedimento removido.');
         // se ficou página vazia após delete, volta uma
         if (this.items().length === 1 && this.pageIndex() > 1) this.pageIndex.set(this.pageIndex() - 1);
         this.load();
       },
-      error: () => this.notificationService.error('Erro', 'Falha ao remover paciente.'),
+      error: () => this.notificationService.error('Erro', 'Falha ao remover procedimento.'),
     });
   }
 }

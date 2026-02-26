@@ -2,15 +2,14 @@
   <div nz-space>
     <input nz-input placeholder="Buscar por nome ou telefone" style="width: 320px" />
 
-    <button nz-button nzType="primary" (click)="openCreate()">Novo paciente</button>
+    <button nz-button nzType="primary" (click)="openCreate()">Novo procedimento</button>
   </div>
 
   <nz-table [nzData]="items()" [nzLoading]="loading()" [nzFrontPagination]="false" [nzTotal]="total()" [nzPageIndex]="pageIndex()" [nzPageSize]="pageSize()" nzShowSizeChanger>
     <thead>
       <tr>
-        <th>Nome</th>
-        <th>Telefone</th>
-        <th>Document</th>
+        <th>Descrição</th>
+        <th>Duração (min)</th>
         <th style="width: 160px">Ações</th>
       </tr>
     </thead>
@@ -18,14 +17,13 @@
     <tbody>
       @for (row of items(); track row.id) {
       <tr>
-        <td>{{ row.name }}</td>
-        <td>{{ row.phone || '-' }}</td>
-        <td>{{ row.document || '-' }}</td>
+        <td>{{ row.description }}</td>
+        <td>{{ row.durationMin || '-' }}</td>
         <td>
           <nz-flex nzGap="small">
             <button nz-button nzType="default" nzSize="small" (click)="openEdit(row)">Editar</button>
 
-            <button nz-button nzDanger nzSize="small" nz-popconfirm nzPopconfirmTitle="Remover este paciente?" (nzOnConfirm)="confirmDelete(row)">Excluir</button>
+            <button nz-button nzDanger nzSize="small" nz-popconfirm nzPopconfirmTitle="Remover este procedimento?" (nzOnConfirm)="confirmDelete(row)">Excluir</button>
           </nz-flex>
         </td>
       </tr>
@@ -39,22 +37,15 @@
     <form [formGroup]="form" nz-form>
       <nz-form-item>
         <nz-form-control nzErrorTip="Informe um nome válido.">
-          <nz-form-label [nzRequired]="true">Nome</nz-form-label>
-          <input nz-input formControlName="name" />
+          <nz-form-label [nzRequired]="true">Descrição</nz-form-label>
+          <input nz-input formControlName="description" />
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
         <nz-form-control>
-          <nz-form-label>Telefone</nz-form-label>
-          <input nz-input formControlName="phone" />
-        </nz-form-control>
-      </nz-form-item>
-
-      <nz-form-item>
-        <nz-form-control>
-          <nz-form-label>Documento</nz-form-label>
-          <input nz-input formControlName="document" />
+          <nz-form-label>Duração (em minutos)</nz-form-label>
+          <input type="number" nz-input formControlName="durationMin" />
         </nz-form-control>
       </nz-form-item>
     </form>

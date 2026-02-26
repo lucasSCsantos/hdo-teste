@@ -12,7 +12,7 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { PatientsApi } from '../../apis/patients.api';
+import { PatientsApi } from '../../apis/patients/patients.api';
 import { Patient, PatientFormValue } from '../../interfaces/patients.interface';
 import { NzFlexModule } from 'ng-zorro-antd/flex';
 @Component({
