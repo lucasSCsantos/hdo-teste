@@ -6,8 +6,9 @@ import { registerLocaleData } from '@angular/common';
 import pt from '@angular/common/locales/pt';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthService } from './domain/auth/services/auth.service';
+import { AuthInterceptor } from './domain/auth/interceptors/auth.interceptor';
 
 registerLocaleData(pt);
 
@@ -18,7 +19,9 @@ export const appConfig: ApplicationConfig = {
     provideNzI18n(pt_BR),
     importProvidersFrom(FormsModule),
     provideAnimationsAsync(),
-    provideHttpClient(),
+    provideHttpClient(withInterceptorsFromDi()),
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+
     provideAppInitializer(() => inject(AuthService).startSession()),
   ],
 };

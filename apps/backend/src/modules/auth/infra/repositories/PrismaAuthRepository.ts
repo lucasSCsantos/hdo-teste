@@ -12,4 +12,14 @@ export class PrismaAuthRepository implements IAuthRepository {
 
     return user;
   }
+
+  async findById(id: number): Promise<User | null> {
+    const user = await prisma.user.findUnique({
+      where: { id },
+    });
+
+    if (!user) return null;
+
+    return user;
+  }
 }

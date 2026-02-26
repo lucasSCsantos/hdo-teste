@@ -23,18 +23,25 @@ export class AuthService {
 
   startSession() {
     const token = localStorage.getItem(ACCESS_TOKEN_KEY);
-
+    console.log(token, 'as');
     if (token) {
-      this.api.me().pipe(
-        tap(user => {
-          this.user.set(user);
-          this.authToken.set(token);
-        }),
-      );
+      this.api
+        .me()
+        .pipe(
+          tap(user => {
+            this.setSession({ user, token });
+          }),
+          catchError(() => {
+            this.setSession({ user: null, token: '' });
+            return of(void 0);
+          }),
+        )
+        .subscribe();
     }
   }
 
   setSession(params: AuthLoginResponse) {
+    console.log(params, 'as');
     this.user.set(params.user);
     this.authToken.set(params.token);
 

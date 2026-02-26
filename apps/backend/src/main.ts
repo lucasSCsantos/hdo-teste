@@ -26,7 +26,7 @@ async function bootstrap() {
   } catch (error) {
     console.error('Error during application bootstrap:', error);
     await prisma.$disconnect();
-    // process.exit(1);
+    process.exit(1);
   }
 }
 

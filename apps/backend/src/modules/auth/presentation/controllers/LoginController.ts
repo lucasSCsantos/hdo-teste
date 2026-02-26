@@ -1,4 +1,3 @@
-// infra/http/controllers/LoginController.ts
 import { Request, Response } from 'express';
 import { LoginUseCase } from '../../application/usecases/LoginUseCase';
 

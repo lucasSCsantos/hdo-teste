@@ -1,43 +1,26 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService = inject(AuthService);
-  const router = inject(Router);
+const ACCESS_TOKEN_KEY = 'auth_token';
 
-  const token = authService.authToken();
+export class AuthInterceptor implements HttpInterceptor {
+  private authService = inject(AuthService);
 
-  if (req.url.includes('/login')) {
-    return next(req).pipe(
-      catchError(error => {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    const isAuthEndpoint = req.url.includes('/login') || req.url.includes('/refresh');
+    const token = this.authService.authToken() || localStorage.getItem(ACCESS_TOKEN_KEY);
+    const authReq = !isAuthEndpoint && token ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } }) : req;
+
+    return next.handle(authReq).pipe(
+      catchError((error: unknown) => {
+        if (error instanceof HttpErrorResponse && error.status === 401 && !isAuthEndpoint) {
+          // aqui entraria refresh+retry; não deslogar direto
+        }
         return throwError(() => error);
       }),
     );
   }
-
-  if (!token) {
-    router.navigate(['/login']);
-    return throwError(() => new Error('No authentication token found'));
-  }
-
-  req = req.clone({
-    setHeaders: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  return next(req).pipe(
-    catchError(error => {
-      if (error.status === 401) {
-        authService.logout();
-        router.navigate(['/login']);
-        return throwError(() => new Error('Session expired. Please login again.'));
-      }
-      return throwError(() => error);
-    }),
-  );
-};
+}

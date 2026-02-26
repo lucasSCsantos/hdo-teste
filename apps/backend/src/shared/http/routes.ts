@@ -8,12 +8,16 @@ import { makeCreatePatientController, makeDeletePatientController, makeListPatie
 
 import { makeCreateProcedureController, makeDeleteProcedureController, makeListProceduresController, makeUpdateProceduresController } from '../container/makeProcedures';
 
-import { makeLoginController } from '../container/makeAuth';
+import { makeGetUserController, makeLoginController } from '../container/makeAuth';
 
 const routes = Router();
 
 const loginController = makeLoginController();
+const getUserController = makeGetUserController();
+
 routes.post('/login', loginController.handle);
+
+routes.get('/me', isAuthenticated, getUserController.handle);
 
 const createAppointmentController = makeCreateAppointmentController();
 const listAppointmentsController = makeListAppointmentsController();
