@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { app } from './app';
 import { prisma } from './shared/database/prismaClient';
 
@@ -7,6 +8,8 @@ async function bootstrap() {
   try {
     await prisma.$connect();
     console.log('Database connected successfully');
+
+    await mongoose.connect(process.env.MONGO_URL || '');
 
     const server = app.listen(PORT, () => {
       console.log(`Server is running on http://localhost:${PORT}`);
@@ -23,7 +26,7 @@ async function bootstrap() {
   } catch (error) {
     console.error('Error during application bootstrap:', error);
     await prisma.$disconnect();
-    process.exit(1);
+    // process.exit(1);
   }
 }
 

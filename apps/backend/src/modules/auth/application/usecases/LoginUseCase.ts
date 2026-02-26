@@ -13,6 +13,7 @@ interface InputDTO extends Partial<User> {
 
 interface OutputDTO {
   token: string;
+  user: Partial<User>;
 }
 export class LoginUseCase {
   constructor(
@@ -30,7 +31,6 @@ export class LoginUseCase {
     }
 
     const passwordMatch = await this.hashService.compare(data.password, user.password);
-
     if (!passwordMatch) {
       throw new AppError('Invalid credentials', 401);
     }
@@ -47,6 +47,6 @@ export class LoginUseCase {
       metadata: { email: user.email },
     });
 
-    return { token };
+    return { token, user: { email: user.email, name: user.name } };
   }
 }
