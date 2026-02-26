@@ -8,7 +8,7 @@ describe('DeletePatientUseCase', () => {
     const repo = new FakePatientRepository();
     const useCase = new DeletePatientUseCase(repo as any);
 
-    const patient: Partial<Patient> = { id: 1, name: 'John Doe', birthDate: new Date('1990-01-01'), phone: '1234567890', cpf: '123.456.789-00' };
+    const patient: Partial<Patient> = { id: 1, name: 'John Doe', phone: '1234567890', document: '123.456.789-00' };
     const result = await repo.create(patient);
 
     await useCase.execute(result);
@@ -29,8 +29,8 @@ describe('DeletePatientUseCase', () => {
     const repo = new FakePatientRepository();
     const useCase = new DeletePatientUseCase(repo as any);
 
-    const patient1: Partial<Patient> = { name: 'John Doe', birthDate: new Date('1990-01-01'), phone: '1234567890', cpf: '123.456.789-00' };
-    const patient2: Partial<Patient> = { name: 'John Doe', birthDate: new Date('1990-01-03'), phone: '1234567892', cpf: '123.456.789-02' };
+    const patient1: Partial<Patient> = { name: 'John Doe', phone: '1234567890', document: '123.456.789-00' };
+    const patient2: Partial<Patient> = { name: 'John Doe', phone: '1234567892', document: '123.456.789-02' };
 
     const result1 = await repo.create(patient1);
     const result2 = await repo.create(patient2);

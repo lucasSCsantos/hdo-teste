@@ -7,8 +7,8 @@ describe('ListPatientsUseCase', () => {
     const repo = new FakePatientRepository();
     const useCase = new ListPatientsUseCase(repo as any);
 
-    const patient1: Partial<Patient> = { id: 1, name: 'John Doe', birthDate: new Date('1990-01-01'), phone: '1234567890', cpf: '123.456.789-00' };
-    const patient2: Partial<Patient> = { id: 2, name: 'John Doe', birthDate: new Date('1990-01-03'), phone: '1234567892', cpf: '123.456.789-02' };
+    const patient1: Partial<Patient> = { id: 1, name: 'John Doe', phone: '1234567890', document: '123.456.789-00' };
+    const patient2: Partial<Patient> = { id: 2, name: 'John Doe', phone: '1234567892', document: '123.456.789-02' };
 
     await repo.create(patient1);
     await repo.create(patient2);

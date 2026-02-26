@@ -2,7 +2,9 @@ import { Request, Response } from 'express';
 import { CreatePatientUseCase } from '../../application/usecases/CreatePatientUseCase';
 
 export class CreatePatientController {
-  constructor(private useCase: CreatePatientUseCase) {}
+  constructor(private useCase: CreatePatientUseCase) {
+    this.handle = this.handle.bind(this);
+  }
 
   async handle(req: Request, res: Response) {
     const result = await this.useCase.execute(req.body);

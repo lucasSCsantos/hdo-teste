@@ -2,7 +2,9 @@ import { Request, Response } from 'express';
 import { DeletePatientUseCase } from '../../application/usecases/DeletePatientUseCase';
 
 export class DeletePatientController {
-  constructor(private useCase: DeletePatientUseCase) {}
+  constructor(private useCase: DeletePatientUseCase) {
+    this.handle = this.handle.bind(this);
+  }
 
   async handle(req: Request, res: Response) {
     const { id } = req.params;

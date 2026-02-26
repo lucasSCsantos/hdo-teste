@@ -9,9 +9,8 @@ describe('CreatePatientUseCase', () => {
 
     const newPatient: Partial<Patient> = {
       name: 'John Doe',
-      birthDate: new Date('1990-01-01'),
       phone: '1234567890',
-      cpf: '123.456.789-00',
+      document: '123.456.789-00',
     };
 
     const result = await useCase.execute(newPatient as any);
@@ -25,9 +24,8 @@ describe('CreatePatientUseCase', () => {
 
   //   const newPatient: Partial<Patient> = {
   //     name: 'John Doe',
-  //     birthDate: new Date('1990-01-01'),
   //     phone: '1234567890',
-  //     cpf: '123.456.789-00',
+  //     document: '123.456.789-00',
   //   };
 
   //   await expect(useCase.execute(newPatient as any)).rejects.toThrow();
@@ -38,9 +36,8 @@ describe('CreatePatientUseCase', () => {
     const useCase = new CreatePatientUseCase(repo as any);
 
     const newPatient: Partial<Patient> = {
-      birthDate: new Date('1990-01-01'),
       phone: '1234567890',
-      cpf: '123.456.789-00',
+      document: '123.456.789-00',
     };
 
     await expect(useCase.execute(newPatient as any)).rejects.toThrow();

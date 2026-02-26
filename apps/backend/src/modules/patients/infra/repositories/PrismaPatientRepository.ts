@@ -12,9 +12,8 @@ export class PrismaPatientRepository implements IPatientRepository {
     return prisma.patient.create({
       data: {
         name: data.name,
-        birthDate: data.birthDate,
         phone: data.phone,
-        cpf: data.cpf,
+        document: data.document,
       },
     });
   }
@@ -34,9 +33,8 @@ export class PrismaPatientRepository implements IPatientRepository {
       where: { id },
       data: {
         name: data.name,
-        birthDate: data.birthDate,
         phone: data.phone,
-        cpf: data.cpf,
+        document: data.document,
       },
     });
   }

@@ -24,10 +24,9 @@ services:
     image: mongo:7
     container_name: mongodb
     restart: unless-stopped
-    command: ["mongod", "--quiet"]
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
-      interval: 5s
+      interval: 30s
       timeout: 5s
       retries: 5
     ports:
@@ -46,14 +45,21 @@ services:
     volumes:
       - .:/app
     command: >
-     sh -c "npm install &&
-             npx nx run data-access:db-generate &&
-             npx nx run data-access:db-migrate &&
-             echo '🚀 Starting Backend...' &&
-             until npx nx serve backend --host=0.0.0.0; do
-               echo 'Backend crashed. Restarting in 3s...';
-               sleep 3;
-             done"
+     sh -c "
+        set -e;
+
+        npm install;
+        npx nx run data-access:db-generate;
+        npx nx run data-access:db-migrate;
+
+        echo 'Starting Backend (will auto-restart on crash)...';
+
+        while true; do
+          npx nx serve backend --host=0.0.0.0 || true;
+          echo 'Backend crashed. Restarting in 3s...';
+          sleep 3;
+        done
+      "
     depends_on:
       postgres:
         condition: service_healthy

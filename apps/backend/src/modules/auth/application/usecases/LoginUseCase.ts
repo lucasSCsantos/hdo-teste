@@ -31,6 +31,7 @@ export class LoginUseCase {
     }
 
     const passwordMatch = await this.hashService.compare(data.password, user.password);
+
     if (!passwordMatch) {
       throw new AppError('Invalid credentials', 401);
     }

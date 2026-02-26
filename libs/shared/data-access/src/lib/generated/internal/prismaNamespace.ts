@@ -758,8 +758,7 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 export const PatientScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  cpf: 'cpf',
-  birthDate: 'birthDate',
+  document: 'document',
   phone: 'phone',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

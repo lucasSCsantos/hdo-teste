@@ -4,9 +4,8 @@ import { AppError } from '../../../../shared/errors/AppError';
 
 interface InputDTO extends Partial<Patient> {
   name: string;
-  birthDate: Date;
   phone: string;
-  cpf: string;
+  document: string;
 }
 
 export class CreatePatientUseCase {
@@ -19,14 +18,13 @@ export class CreatePatientUseCase {
 
     try {
       const patient = await this.repo.create({
-        birthDate: data.birthDate,
-        cpf: data.cpf,
+        document: data.document,
         name: data.name,
         phone: data.phone,
       });
       return patient;
     } catch (err) {
-      throw new AppError('Could not delete procedure. Database error.', 500);
+      throw new AppError('Could not create patient. Database error.', 500);
     }
   }
 }
