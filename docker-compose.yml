@@ -24,6 +24,7 @@ services:
     image: mongo:7
     container_name: mongodb
     restart: unless-stopped
+    command: ["mongod", "--quiet"]
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 5s
