@@ -23,7 +23,6 @@ export class AuthService {
 
   startSession() {
     const token = localStorage.getItem(ACCESS_TOKEN_KEY);
-    console.log(token, 'as');
     if (token) {
       this.api
         .me()
@@ -38,16 +37,17 @@ export class AuthService {
         )
         .subscribe();
     }
+
+    this.setSession({ user: null, token: '' });
   }
 
   setSession(params: AuthLoginResponse) {
-    console.log(params, 'as');
     this.user.set(params.user);
     this.authToken.set(params.token);
 
     if (!params.token) {
       localStorage.removeItem(ACCESS_TOKEN_KEY);
-      this.router.navigate(['/login']);
+      this.router.navigate(['/auth/login']);
       return;
     }
 
@@ -69,7 +69,7 @@ export class AuthService {
       catchError(() => of(void 0)),
       tap(() => {
         this.setSession({ user: null, token: '' });
-        this.router.navigate(['/login']);
+        this.router.navigate(['/auth/login']);
       }),
     );
   }

@@ -8,7 +8,7 @@ export class UpdatePatientController {
 
   async handle(req: Request, res: Response) {
     const { id } = req.params;
-    const result = await this.useCase.execute({ id, ...req.body });
+    const result = await this.useCase.execute({ id: +id, ...req.body });
     return res.status(204).json(result);
   }
 }

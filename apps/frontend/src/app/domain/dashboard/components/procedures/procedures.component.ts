@@ -12,11 +12,11 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { PatientsApi } from '../../apis/patients.api';
-import { Patient, PatientFormValue } from '../../interfaces/patients.interface';
+import { PatientsApi } from '../../apis/procedures.api';
+import { Patient, PatientFormValue } from '../../interfaces/procedures.interface';
 import { NzFlexModule } from 'ng-zorro-antd/flex';
 @Component({
-  selector: 'app-patients',
+  selector: 'app-procedures',
   standalone: true,
   imports: [
     CommonModule,
@@ -32,7 +32,7 @@ import { NzFlexModule } from 'ng-zorro-antd/flex';
     NzSwitchModule,
     NzFlexModule,
   ],
-  templateUrl: './patients.component.html',
+  templateUrl: './procedures.component.html',
 })
 export class PatientsComponent implements OnInit {
   private api = inject(PatientsApi);
