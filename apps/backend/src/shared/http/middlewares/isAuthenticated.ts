@@ -14,6 +14,11 @@ export function isAuthenticated(req: Request, res: Response, next: NextFunction)
 
   try {
     const decoded = tokenService.verify(token);
+
+    if (decoded.type !== 'access') {
+      throw new Error('Invalid token type');
+    }
+
     req.user = { id: decoded.sub };
     return next();
   } catch {

@@ -37,18 +37,13 @@ import { NzFlexModule } from 'ng-zorro-antd/flex';
 export class ProceduresComponent implements OnInit {
   private api = inject(ProceduresApi);
   private notificationService = inject(NzNotificationService);
-  private modalService = inject(NzModalService);
   private fb = inject(FormBuilder);
 
-  // table state
+  // estados da tabela
   loading = signal(false);
   items = signal<Procedure[]>([]);
-  total = signal(0);
-  pageIndex = signal(1);
-  pageSize = signal(10);
-  search = signal('');
 
-  // modal state
+  // estados do modal
   isModalOpen = signal(false);
   isSaving = signal(false);
   editing = signal<Procedure | null>(null);
@@ -71,34 +66,21 @@ export class ProceduresComponent implements OnInit {
       .subscribe({
         next: res => {
           this.items.set(res);
-          // this.total.set(res.total);
           this.loading.set(false);
         },
-        error: error => {
-          console.error(error);
+        error: () => {
           this.loading.set(false);
           this.notificationService.error('Erro', 'Falha ao carregar procedimentos.');
         },
       });
   }
-  // onQueryChange(): void {
-  //   this.pageIndex.set(1);
-  //   this.load();
-  // }
-  // onPageChange(pi: number): void {
-  //   this.pageIndex.set(pi);
-  //   this.load();
-  // }
-  // onPageSizeChange(ps: number): void {
-  //   this.pageSize.set(ps);
-  //   this.pageIndex.set(1);
-  //   this.load();
-  // }
+
   openCreate(): void {
     this.editing.set(null);
     this.form.reset({ description: '', durationMin: 0 });
     this.isModalOpen.set(true);
   }
+
   openEdit(row: Procedure): void {
     this.editing.set(row);
     this.form.reset({
@@ -107,10 +89,12 @@ export class ProceduresComponent implements OnInit {
     });
     this.isModalOpen.set(true);
   }
+
   closeModal(): void {
     if (this.isSaving()) return;
     this.isModalOpen.set(false);
   }
+
   save(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -133,12 +117,11 @@ export class ProceduresComponent implements OnInit {
       },
     });
   }
+
   confirmDelete(row: Procedure): void {
     this.api.delete(row.id).subscribe({
       next: () => {
         this.notificationService.success('Sucesso', 'Procedimento removido.');
-        // se ficou página vazia após delete, volta uma
-        if (this.items().length === 1 && this.pageIndex() > 1) this.pageIndex.set(this.pageIndex() - 1);
         this.load();
       },
       error: () => this.notificationService.error('Erro', 'Falha ao remover procedimento.'),

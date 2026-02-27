@@ -18,19 +18,6 @@ describe('CreatePatientUseCase', () => {
     expect(result).toBeDefined();
   });
 
-  // it('should not create duplicated patient', async () => {
-  //   const repo = new FakePatientRepository();
-  //   const useCase = new CreatePatientUseCase(repo as any);
-
-  //   const newPatient: Partial<Patient> = {
-  //     name: 'John Doe',
-  //     phone: '1234567890',
-  //     document: '123.456.789-00',
-  //   };
-
-  //   await expect(useCase.execute(newPatient as any)).rejects.toThrow();
-  // });
-
   it('should not create patient without data', async () => {
     const repo = new FakePatientRepository();
     const useCase = new CreatePatientUseCase(repo as any);

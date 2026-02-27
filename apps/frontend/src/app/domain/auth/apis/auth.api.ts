@@ -10,12 +10,12 @@ import { User } from '../interfaces/user.interfaces';
 export class AuthApi {
   private httpClient = inject(HttpClient);
 
-  login(email: string, password: string): Observable<AuthLoginResponse> {
-    return this.httpClient.post<AuthLoginResponse>('http://localhost:3333/api/login', { email, password });
+  login(payload: Partial<User>): Observable<AuthLoginResponse> {
+    return this.httpClient.post<AuthLoginResponse>('http://localhost:3333/api/login', payload);
   }
 
-  refresh(): Observable<{ token: string }> {
-    return this.httpClient.post<{ token: string }>(`http://localhost:3333/api/refresh`, {});
+  refresh(refreshToken: string): Observable<AuthLoginResponse> {
+    return this.httpClient.post<AuthLoginResponse>(`http://localhost:3333/api/refresh`, { refreshToken });
   }
 
   logout(): Observable<void> {

@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NzFlexModule } from 'ng-zorro-antd/flex';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -17,25 +17,22 @@ import { AuthService } from '../../services/auth.service';
 export class LoginPage {
   private notificationService = inject(NzNotificationService);
   private authService = inject(AuthService);
+  private fb = inject(FormBuilder);
 
-  loginForm: FormGroup;
-
-  constructor() {
-    this.loginForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required]),
-    });
-  }
+  form = this.fb.nonNullable.group({
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required]),
+  });
 
   login(): void {
-    if (!this.loginForm.valid) {
+    if (!this.form.valid) {
       this.notificationService.error('Erro', 'Por favor, preencha todos os campos corretamente.');
       return;
     }
 
-    const { email, password } = this.loginForm.value;
+    const payload = this.form.getRawValue();
 
-    this.authService.login(email, password).subscribe({
+    this.authService.login(payload).subscribe({
       next: () => this.notificationService.success('Sucesso', 'Login realizado com sucesso!'),
       error: () => this.notificationService.error('Erro', 'Falha ao fazer login. Verifique suas credenciais e tente novamente.'),
     });

@@ -1,0 +1,10 @@
+export enum AuditAction {
+  LOGIN = 'LOGIN',
+  CREATE_APPOINTMENT = 'CREATE_APPOINTMENT',
+  CANCEL_APPOINTMENT = 'CANCEL_APPOINTMENT',
+}
+
+export enum AuditEntityType {
+  APPOINTMENT = 'APPOINTMENT',
+  USER = 'USER',
+}

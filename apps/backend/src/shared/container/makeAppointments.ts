@@ -7,12 +7,14 @@ import { CancelAppointmentController } from '../../modules/appointments/presenta
 import { ListAppointmentsController } from '../../modules/appointments/presentation/controllers/ListAppointmentsController';
 import { ListAppointmentsUseCase } from '../../modules/appointments/application/usecases/ListAppointmentsUseCase';
 import { MongoAuditLogRepository } from '../../modules/audit/infra/repositories/MongooseAuditLogRepository';
+import { PrismaPatientRepository } from '../../modules/patients/infra/repositories/PrismaPatientRepository';
 
 export function makeCreateAppointmentController() {
   const repo = new PrismaAppointmentRepository();
   const procedureRepo = new PrismaProcedureRepository();
+  const patientRepo = new PrismaPatientRepository();
   const auditRepo = new MongoAuditLogRepository();
-  const useCase = new CreateAppointmentUseCase(repo as any, procedureRepo as any, auditRepo as any);
+  const useCase = new CreateAppointmentUseCase(repo as any, procedureRepo as any, patientRepo as any, auditRepo as any);
   return new CreateAppointmentController(useCase);
 }
 

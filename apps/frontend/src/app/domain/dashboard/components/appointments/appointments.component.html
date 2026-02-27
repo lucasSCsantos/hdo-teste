@@ -1,0 +1,117 @@
+<nz-flex nzVertical nzGap="middle" style="width: 100%">
+  <nz-flex nzGap="small">
+    <nz-select style="width: 180px" nzPlaceHolder="Paciente" nzAllowClear [(ngModel)]="patientFilter" (ngModelChange)="patientFilter.set($event); onQueryChange()">
+      @for (patient of patientsFilterOptions(); track patient.id) {
+      <nz-option [nzValue]="patient.id" [nzLabel]="patient.name">{{ patient.name }}</nz-option>
+      }
+    </nz-select>
+
+    <nz-select style="width: 180px" nzPlaceHolder="Status" nzAllowClear [(ngModel)]="statusFilter" (ngModelChange)="statusFilter.set($event); onQueryChange()">
+      <nz-option nzValue="SCHEDULED" nzLabel="Scheduled"></nz-option>
+      <nz-option nzValue="CANCELED" nzLabel="Canceled"></nz-option>
+    </nz-select>
+
+    <nz-range-picker [(ngModel)]="rangeFilter" (ngModelChange)="rangeFilter.set($event); onQueryChange()" />
+
+    <button nz-button nzType="primary" (click)="openCreate()">Novo agendamento</button>
+  </nz-flex>
+
+  <nz-table [nzData]="items()" [nzLoading]="loading()" [nzFrontPagination]="false" nzShowSizeChanger>
+    <thead>
+      <tr>
+        <th>Paciente</th>
+        <th>Procedimento</th>
+        <th>Início</th>
+        <th>Status</th>
+        <th style="width: 140px">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of items(); track row.id) {
+      <tr>
+        <td>{{ row.patientName }}</td>
+        <td>{{ row.procedureDescription }}</td>
+        <td>{{ row.startTime | formatDate }}</td>
+        <td>
+          @if (row.status === 'SCHEDULED') {
+          <nz-tag nzColor="blue">Agendado</nz-tag>
+          } @else {
+          <nz-tag nzColor="red">Cancelado</nz-tag>
+          }
+        </td>
+
+        <td>
+          <nz-space>
+            <button nz-button nzSize="small" nzDanger [disabled]="row.status === 'CANCELED'" (click)="openCancel(row)">Cancelar</button>
+          </nz-space>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </nz-table>
+</nz-flex>
+
+<nz-modal
+  [nzVisible]="isCreateOpen()"
+  [nzTitle]="createTitle"
+  [nzOkLoading]="isCreateSaving()"
+  (nzOnCancel)="closeCreate()"
+  (nzOnOk)="saveCreate()"
+  nzOkText="Criar"
+  nzCancelText="Cancelar"
+>
+  <ng-container *nzModalContent>
+    <form [formGroup]="createForm" nz-form>
+      <nz-form-item>
+        <nz-form-control>
+          <nz-form-label [nzRequired]="true">Paciente</nz-form-label>
+          <nz-select formControlName="patientId" nzShowSearch nzServerSearch nzPlaceHolder="Digite para buscar...">
+            @for (opt of patientOptions(); track opt.id) {
+            <nz-option [nzValue]="opt.id" [nzLabel]="opt.name"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control>
+          <nz-form-label [nzRequired]="true">Procedimento</nz-form-label>
+          <nz-select formControlName="procedureId" nzShowSearch nzServerSearch nzPlaceHolder="Digite para buscar...">
+            @for (opt of procedureOptions(); track opt.id) {
+            <nz-option [nzValue]="opt.id" [nzLabel]="opt.description"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control>
+          <nz-form-label [nzRequired]="true">Data de início</nz-form-label>
+          <nz-date-picker formControlName="startTime" [nzShowTime]="{ nzFormat: 'HH:mm' }" nzFormat="dd/MM/yyyy HH:mm" style="width: 100%"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<nz-modal
+  [nzVisible]="isCancelOpen()"
+  [nzTitle]="cancelTitle()"
+  [nzOkLoading]="isCancelSaving()"
+  (nzOnCancel)="closeCancel()"
+  (nzOnOk)="confirmCancel()"
+  nzOkText="Confirmar cancelamento"
+  nzCancelText="Voltar"
+  nzOkDanger
+>
+  <ng-container *nzModalContent>
+    <form [formGroup]="cancelForm" nz-form>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Motivo de cancelamento é obrigatório">
+          <nz-form-label [nzRequired]="true">Motivo</nz-form-label>
+          <textarea nz-input rows="3" formControlName="cancellationReason" placeholder="Descreva o motivo do cancelamento..."></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

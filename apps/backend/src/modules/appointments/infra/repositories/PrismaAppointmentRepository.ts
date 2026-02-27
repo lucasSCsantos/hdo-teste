@@ -1,6 +1,7 @@
-import { Appointment, AppointmentStatus } from '@hdo-teste-tecnico/shared/data-access';
+import { Appointment, AppointmentStatus, Prisma } from '@hdo-teste-tecnico/shared/data-access';
 import { IAppointmentRepository } from '../../domain/repositories/IAppointmentRepository';
 import { prisma } from '../../../../shared/database/prismaClient';
+import { start } from 'repl';
 
 export class PrismaAppointmentRepository implements IAppointmentRepository {
   async findConflict(appointment: Appointment) {
@@ -8,7 +9,7 @@ export class PrismaAppointmentRepository implements IAppointmentRepository {
       where: {
         startTime: { lt: appointment.startTime },
         endTime: { gt: appointment.startTime },
-        procedureId: appointment.procedureId,
+        OR: [{ procedureId: appointment.procedureId }, { patientId: appointment.patientId }],
       },
     });
   }
@@ -19,8 +20,8 @@ export class PrismaAppointmentRepository implements IAppointmentRepository {
         id: data.id,
         patientId: data.patientId,
         procedureId: data.procedureId,
-        startTime: data.start,
-        endTime: data.end,
+        startTime: data.startTime,
+        endTime: data.endTime,
       },
     });
   }
@@ -35,7 +36,39 @@ export class PrismaAppointmentRepository implements IAppointmentRepository {
     });
   }
 
-  async list(): Promise<Appointment[]> {
-    return prisma.appointment.findMany();
+  async list(): Promise<
+    Prisma.AppointmentGetPayload<{
+      include: { patient: true; procedure: true };
+    }>[]
+  > {
+    return prisma.appointment.findMany({
+      include: {
+        patient: true,
+        procedure: true,
+      },
+    });
+  }
+
+  async listQuery(params: { status?: AppointmentStatus; patientId?: string; startDate?: Date; endDate?: Date }): Promise<
+    Prisma.AppointmentGetPayload<{
+      include: { patient: true; procedure: true };
+    }>[]
+  > {
+    const { status, patientId, startDate, endDate } = params;
+
+    const where: Prisma.AppointmentWhereInput = {
+      ...(status ? { status } : {}),
+      ...(patientId ? { patientId: +patientId } : {}),
+      ...(startDate &&
+        endDate && {
+          startTime: { gte: startDate, lt: endDate },
+        }),
+    };
+
+    return prisma.appointment.findMany({
+      where,
+      include: { patient: true, procedure: true },
+      orderBy: { startTime: 'asc' },
+    });
   }
 }

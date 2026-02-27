@@ -33,7 +33,7 @@ export class PrismaProcedureRepository implements IProcedureRepository {
       where: { id },
       data: {
         description: data.description,
-        durationMin: data.durationMinute,
+        durationMin: data.durationMin,
       },
     });
   }

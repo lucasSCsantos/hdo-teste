@@ -5,10 +5,12 @@ import { NzSegmentedModule } from 'ng-zorro-antd/segmented';
 import { PatientsComponent } from '../../components/patients/patients.component';
 import { DashboardSegmentedOptions } from '../../enums/dashboard.enum';
 import { ProceduresComponent } from '../../components/procedures/procedures.component';
+import { AppointmentsComponent } from '../../components/appointments/appointments.component';
+import { AuditComponent } from '../../components/audit/audit.component';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [NzTypographyModule, NzFlexModule, NzSegmentedModule, PatientsComponent, ProceduresComponent],
+  imports: [NzTypographyModule, NzFlexModule, NzSegmentedModule, PatientsComponent, ProceduresComponent, AppointmentsComponent, AuditComponent],
   templateUrl: './dashboard.page.html',
   styleUrl: './dashboard.page.scss',
 })

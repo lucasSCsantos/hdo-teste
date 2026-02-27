@@ -81,5 +81,8 @@
     "pg": "^8.18.0",
     "rxjs": "~7.8.0",
     "zone.js": "^0.15.1"
+  },
+  "prisma": {
+    "seed": "tsx libs/shared/data-access/prisma/prisma/seed.ts"
   }
 }

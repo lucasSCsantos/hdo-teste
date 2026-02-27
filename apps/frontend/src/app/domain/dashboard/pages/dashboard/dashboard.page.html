@@ -1,15 +1,13 @@
 <nz-flex nzJustify="space-between" nzVertical nzGap="middle">
   <div>
-    <h1 nz-typography nz-title>Dashboard</h1>
-    <span nz-typography nzType="secondary"> This is the dashboard page. </span>
+    <h1 nz-typography nz-title>Hospital do Obesidade</h1>
+    <span nz-typography nzType="secondary"> Agende procedimentos e verifique informações administrativas</span>
   </div>
   <nz-segmented nzBlock [nzOptions]="options" (nzValueChange)="handleValueChange($event)" />
 
   <div style="margin-top: 16px">
-    @switch (selectedOption) { @case ('Appointments') {
-    <p>TODO appointments</p>
-    } @case ('Audit') {
-    <p>TODO audit</p>
-    } @case ('Patients') { <app-patients /> } @case ('Procedures') { <app-procedures /> } }
+    @switch (selectedOption) { @case ('Audit') {
+    <app-audit />
+    } @case ('Patients') { <app-patients /> } @case ('Procedures') { <app-procedures /> } @case ('Appointments') { <app-appointments /> }}
   </div>
 </nz-flex>

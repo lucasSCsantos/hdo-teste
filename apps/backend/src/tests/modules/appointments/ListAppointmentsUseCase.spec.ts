@@ -27,7 +27,7 @@ describe('ListAppointmentsUseCase', () => {
         createdAt: new Date('2026-01-27T11:00:00'),
       },
     ];
-    // Seed some appointments
+
     newAppointments.map(a => repo.create(a));
 
     const result = await useCase.execute();

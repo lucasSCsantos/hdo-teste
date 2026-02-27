@@ -1,5 +1,4 @@
 import { IProcedureRepository } from '../../domain/repositories/IProcedureRepository';
-// import { AppError } from '../../../shared/errors/AppError';
 
 export class ListProceduresUseCase {
   constructor(private repo: IProcedureRepository) {}

@@ -3,6 +3,7 @@ import { IAppointmentRepository } from '../../domain/repositories/IAppointmentRe
 import { IProcedureRepository } from '../../../procedures/domain/repositories/IProcedureRepository';
 import { AppError } from '../../../../shared/errors/AppError';
 import { IAuditLogRepository } from '../../../audit/domain/repositories/IAuditLogRepository';
+import { IPatientRepository } from '../../../patients/domain/repositories/IPatientRepository';
 
 interface InputDTO extends Partial<Appointment> {
   patientId: number;
@@ -15,29 +16,37 @@ export class CreateAppointmentUseCase {
   constructor(
     private repo: IAppointmentRepository,
     private procedureRepo: IProcedureRepository,
+    private patientRepo: IPatientRepository,
     private auditRepo: IAuditLogRepository,
   ) {}
 
   async execute(data: InputDTO) {
-    const procedure = await this.procedureRepo.findById(data.procedureId);
+    const procedure = await this.procedureRepo.findById(+data.procedureId);
 
     if (!procedure) {
       throw new AppError('Procedure not found', 404);
     }
 
+    const patient = await this.patientRepo.findById(+data.patientId);
+
+    if (!patient) {
+      throw new AppError('Patient not found', 404);
+    }
+
     const conflict = await this.repo.findConflict(data as Appointment);
 
-    const endTime = new Date(data.startTime.getTime() + procedure?.durationMin * 60000);
-
     if (conflict) {
-      throw new AppError('Appointment conflict');
+      throw new AppError('Appointment conflict', 400);
     }
+
+    const startTime = new Date(data.startTime);
+    const endTime = new Date(startTime.getTime() + procedure.durationMin * 60000);
 
     try {
       const appointment = await this.repo.create({
         patientId: data.patientId,
         procedureId: data.procedureId,
-        startTime: data.startTime,
+        startTime,
         endTime,
       });
 

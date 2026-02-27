@@ -15,6 +15,8 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { PatientsApi } from '../../apis/patients/patients.api';
 import { Patient, PatientFormValue } from '../../interfaces/patients.interface';
 import { NzFlexModule } from 'ng-zorro-antd/flex';
+import { FormatPhonePipe } from '../../../../core/pipes/formatPhone/formatPhone.pipe';
+import { FormatDocumentPipe } from '../../../../core/pipes/formatDocument/formatDocument.pipe';
 @Component({
   selector: 'app-patients',
   standalone: true,
@@ -31,24 +33,21 @@ import { NzFlexModule } from 'ng-zorro-antd/flex';
     NzFormModule,
     NzSwitchModule,
     NzFlexModule,
+    FormatPhonePipe,
+    FormatDocumentPipe,
   ],
   templateUrl: './patients.component.html',
 })
 export class PatientsComponent implements OnInit {
   private api = inject(PatientsApi);
   private notificationService = inject(NzNotificationService);
-  private modalService = inject(NzModalService);
   private fb = inject(FormBuilder);
 
-  // table state
+  // estados da tabela
   loading = signal(false);
   items = signal<Patient[]>([]);
-  total = signal(0);
-  pageIndex = signal(1);
-  pageSize = signal(10);
-  search = signal('');
 
-  // modal state
+  // estados do modal
   isModalOpen = signal(false);
   isSaving = signal(false);
   editing = signal<Patient | null>(null);
@@ -56,8 +55,8 @@ export class PatientsComponent implements OnInit {
 
   form = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
-    document: [null as string | null],
-    phone: [null as string | null],
+    document: [null as string | null, [Validators.minLength(11), Validators.maxLength(11)]],
+    phone: [null as string | null, [Validators.minLength(11), Validators.maxLength(14)]],
   });
 
   ngOnInit(): void {
@@ -72,34 +71,21 @@ export class PatientsComponent implements OnInit {
       .subscribe({
         next: res => {
           this.items.set(res);
-          // this.total.set(res.total);
           this.loading.set(false);
         },
-        error: error => {
-          console.error(error);
+        error: err => {
           this.loading.set(false);
-          this.notificationService.error('Erro', 'Falha ao carregar pacientes.');
+          this.notificationService.error('Erro', err.error.message);
         },
       });
   }
-  // onQueryChange(): void {
-  //   this.pageIndex.set(1);
-  //   this.load();
-  // }
-  // onPageChange(pi: number): void {
-  //   this.pageIndex.set(pi);
-  //   this.load();
-  // }
-  // onPageSizeChange(ps: number): void {
-  //   this.pageSize.set(ps);
-  //   this.pageIndex.set(1);
-  //   this.load();
-  // }
+
   openCreate(): void {
     this.editing.set(null);
     this.form.reset({ name: '', phone: null, document: '' });
     this.isModalOpen.set(true);
   }
+
   openEdit(row: Patient): void {
     this.editing.set(row);
     this.form.reset({
@@ -109,13 +95,15 @@ export class PatientsComponent implements OnInit {
     });
     this.isModalOpen.set(true);
   }
+
   closeModal(): void {
     if (this.isSaving()) return;
     this.isModalOpen.set(false);
   }
+
   save(): void {
     if (this.form.invalid) {
-      this.form.markAllAsTouched();
+      this.notificationService.error('Erro', 'Formulário inválido. Verifique os campos e tente novamente.');
       return;
     }
     const payload = this.form.getRawValue() as PatientFormValue;
@@ -129,21 +117,20 @@ export class PatientsComponent implements OnInit {
         this.notificationService.success('Sucesso', editing ? 'Paciente atualizado.' : 'Paciente criado.');
         this.load();
       },
-      error: () => {
+      error: err => {
         this.isSaving.set(false);
-        this.notificationService.error('Erro', 'Falha ao salvar paciente.');
+        this.notificationService.error('Erro', err.error.message);
       },
     });
   }
+
   confirmDelete(row: Patient): void {
     this.api.delete(row.id).subscribe({
       next: () => {
         this.notificationService.success('Sucesso', 'Paciente removido.');
-        // se ficou página vazia após delete, volta uma
-        if (this.items().length === 1 && this.pageIndex() > 1) this.pageIndex.set(this.pageIndex() - 1);
         this.load();
       },
-      error: () => this.notificationService.error('Erro', 'Falha ao remover paciente.'),
+      error: err => this.notificationService.error('Erro', err.error.message),
     });
   }
 }

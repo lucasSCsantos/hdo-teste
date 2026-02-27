@@ -1,11 +1,9 @@
 <nz-flex nzVertical nzGap="middle" style="width: 100%">
-  <div nz-space>
-    <input nz-input placeholder="Buscar por nome ou telefone" style="width: 320px" />
-
+  <nz-flex nzGap="small">
     <button nz-button nzType="primary" (click)="openCreate()">Novo procedimento</button>
-  </div>
+  </nz-flex>
 
-  <nz-table [nzData]="items()" [nzLoading]="loading()" [nzFrontPagination]="false" [nzTotal]="total()" [nzPageIndex]="pageIndex()" [nzPageSize]="pageSize()" nzShowSizeChanger>
+  <nz-table [nzData]="items()" [nzLoading]="loading()" [nzFrontPagination]="false" nzShowSizeChanger>
     <thead>
       <tr>
         <th>Descrição</th>
@@ -36,7 +34,7 @@
   <ng-container *nzModalContent>
     <form [formGroup]="form" nz-form>
       <nz-form-item>
-        <nz-form-control nzErrorTip="Informe um nome válido.">
+        <nz-form-control>
           <nz-form-label [nzRequired]="true">Descrição</nz-form-label>
           <input nz-input formControlName="description" />
         </nz-form-control>

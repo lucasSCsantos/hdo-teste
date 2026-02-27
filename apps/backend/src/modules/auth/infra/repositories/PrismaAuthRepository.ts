@@ -22,4 +22,11 @@ export class PrismaAuthRepository implements IAuthRepository {
 
     return user;
   }
+
+  async updateRefreshToken(id: number, refreshToken: string | null): Promise<void> {
+    await prisma.user.update({
+      where: { id: +id },
+      data: { refreshToken },
+    });
+  }
 }

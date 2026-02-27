@@ -2,7 +2,9 @@ import { Request, Response } from 'express';
 import { DeleteProcedureUseCase } from '../../application/usecases/DeleteProcedureUseCase';
 
 export class DeleteProcedureController {
-  constructor(private useCase: DeleteProcedureUseCase) {}
+  constructor(private useCase: DeleteProcedureUseCase) {
+    this.handle = this.handle.bind(this);
+  }
 
   async handle(req: Request, res: Response) {
     const { id } = req.params;

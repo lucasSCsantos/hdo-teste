@@ -14,6 +14,7 @@ interface InputDTO extends Partial<User> {
 interface OutputDTO {
   token: string;
   user: Partial<User>;
+  refreshToken: string;
 }
 export class LoginUseCase {
   constructor(
@@ -36,9 +37,23 @@ export class LoginUseCase {
       throw new AppError('Invalid credentials', 401);
     }
 
-    const token = this.tokenService.generate({
-      sub: user.id.toString(),
-    });
+    const token = this.tokenService.generate(
+      {
+        sub: user.id.toString(),
+        type: 'access',
+      },
+      '15m',
+    );
+
+    const refreshToken = this.tokenService.generate(
+      {
+        sub: user.id.toString(),
+        type: 'refresh',
+      },
+      '30d',
+    );
+
+    await this.repo.updateRefreshToken(user.id, refreshToken);
 
     await this.auditRepo.create({
       action: 'LOGIN',
@@ -48,6 +63,6 @@ export class LoginUseCase {
       metadata: { email: user.email },
     });
 
-    return { token, user: { email: user.email, name: user.name } };
+    return { token, refreshToken, user: { email: user.email, name: user.name } };
   }
 }

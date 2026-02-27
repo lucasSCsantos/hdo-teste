@@ -1,10 +1,10 @@
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import { ITokenService, TokenPayload } from '../../domain/services/ITokenService';
 
 export class JwtTokenService implements ITokenService {
-  generate(payload: TokenPayload): string {
+  generate(payload: TokenPayload, expiresIn?: SignOptions['expiresIn']): string {
     return jwt.sign(payload, process.env.JWT_SECRET!, {
-      expiresIn: '1d',
+      expiresIn: expiresIn || '1d',
     });
   }
 

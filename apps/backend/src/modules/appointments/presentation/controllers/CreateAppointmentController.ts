@@ -2,7 +2,9 @@ import { Request, Response } from 'express';
 import { CreateAppointmentUseCase } from '../../application/usecases/CreateAppointmentUseCase';
 
 export class CreateAppointmentController {
-  constructor(private useCase: CreateAppointmentUseCase) {}
+  constructor(private useCase: CreateAppointmentUseCase) {
+    this.handle = this.handle.bind(this);
+  }
 
   async handle(req: Request, res: Response) {
     const userId = req.user!.id;

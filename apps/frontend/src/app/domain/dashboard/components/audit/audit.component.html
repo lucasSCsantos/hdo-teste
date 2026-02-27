@@ -1,0 +1,48 @@
+<nz-flex nzVertical nzGap="middle" style="width: 100%">
+  <nz-table [nzData]="items()" [nzLoading]="loading()" [nzFrontPagination]="false" nzShowSizeChanger>
+    <thead>
+      <tr>
+        <th>Quando</th>
+        <th>Ação</th>
+        <th>ID do Autor</th>
+        <th>Entidade</th>
+        <th>ID da Entidade</th>
+        <th>Metadata</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (row of items(); track rowId(row)) {
+      <tr>
+        <td>{{ row.createdAt | formatDate }}</td>
+
+        <td>
+          <nz-tag [nzColor]="actionColor(row.action)">{{ row.action }}</nz-tag>
+        </td>
+
+        <td>{{ row.actorId }}</td>
+
+        <td>
+          <nz-tag [nzColor]="entityColor(row.entityType)">{{ row.entityType }}</nz-tag>
+        </td>
+
+        <td>{{ row.entityId }}</td>
+
+        <td>
+          @if (row.metadata) {
+          <button nz-button nzSize="small" (click)="openMetadata(row)">Ver</button>
+          } @else {
+          <span>-</span>
+          }
+        </td>
+      </tr>
+      }
+    </tbody>
+  </nz-table>
+</nz-flex>
+
+<nz-modal [nzVisible]="isMetaOpen()" [nzTitle]="metaTitle()" (nzOnCancel)="closeMetadata()" [nzFooter]="null">
+  <ng-container *nzModalContent>
+    <pre style="max-height: 60vh; overflow: auto; margin: 0">{{ metaPrettyJson() }}</pre>
+  </ng-container>
+</nz-modal>

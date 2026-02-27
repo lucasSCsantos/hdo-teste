@@ -3,25 +3,13 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Patient } from '../../interfaces/patients.interface';
 
-// export interface PaginatedResult<T> {
-//   items: T[];
-//   total: number;
-// }
-
 @Injectable({ providedIn: 'root' })
 export class PatientsApi {
   private http = inject(HttpClient);
   private baseUrl = 'http://localhost:3333/api/patients';
 
-  list(query?: { pageIndex: number; pageSize: number; search?: string }): Observable<Patient[]> {
-    // let params = new HttpParams().set('pageIndex', query.pageIndex).set('pageSize', query.pageSize);
-
-    // if (query.search) params = params.set('search', query.search);
-
-    return this.http.get<Patient[]>(
-      this.baseUrl,
-      // , { params }
-    );
+  list(): Observable<Patient[]> {
+    return this.http.get<Patient[]>(this.baseUrl);
   }
 
   create(payload: Omit<Patient, 'id' | 'createdAt'>): Observable<Patient> {

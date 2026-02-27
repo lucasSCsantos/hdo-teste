@@ -1,4 +1,3 @@
-// shared/http/routes.ts
 import { Router } from 'express';
 import { isAuthenticated } from './middlewares/isAuthenticated';
 
@@ -8,14 +7,17 @@ import { makeCreatePatientController, makeDeletePatientController, makeListPatie
 
 import { makeCreateProcedureController, makeDeleteProcedureController, makeListProceduresController, makeUpdateProceduresController } from '../container/makeProcedures';
 
-import { makeGetUserController, makeLoginController } from '../container/makeAuth';
+import { makeGetUserController, makeLoginController, makeRefreshController } from '../container/makeAuth';
+import { makeListAuditController } from '../container/makeAudit';
 
 const routes = Router();
 
 const loginController = makeLoginController();
+const refreshController = makeRefreshController();
 const getUserController = makeGetUserController();
 
 routes.post('/login', loginController.handle);
+routes.post('/refresh', refreshController.handle);
 
 routes.get('/me', isAuthenticated, getUserController.handle);
 
@@ -25,7 +27,7 @@ const cancelAppointmentController = makeCancelAppointmentController();
 
 routes.post('/appointments', isAuthenticated, createAppointmentController.handle);
 routes.get('/appointments', isAuthenticated, listAppointmentsController.handle);
-routes.patch('/appointments/:id/cancel', isAuthenticated, cancelAppointmentController.handle);
+routes.post('/appointments/:id/cancel', isAuthenticated, cancelAppointmentController.handle);
 
 const createPatientController = makeCreatePatientController();
 const listPatientsController = makeListPatientsController();
@@ -46,5 +48,9 @@ routes.post('/procedures', isAuthenticated, createProcedureController.handle);
 routes.get('/procedures', isAuthenticated, listProceduresController.handle);
 routes.delete('/procedures/:id', isAuthenticated, deleteProcedureController.handle);
 routes.put('/procedures/:id', isAuthenticated, updateProcedureController.handle);
+
+const listAuditController = makeListAuditController();
+
+routes.get('/audit-logs', isAuthenticated, listAuditController.handle);
 
 export default routes;
