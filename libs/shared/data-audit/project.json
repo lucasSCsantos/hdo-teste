@@ -1,0 +1,19 @@
+{
+  "name": "data-audit",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/data-audit/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/data-audit",
+        "main": "libs/shared/data-audit/src/index.ts",
+        "tsConfig": "libs/shared/data-audit/tsconfig.lib.json",
+        "assets": ["libs/shared/data-audit/*.md"]
+      }
+    }
+  }
+}

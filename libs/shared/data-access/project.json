@@ -1,0 +1,34 @@
+{
+  "name": "data-access",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/data-access/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "db-generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma generate --schema=libs/shared/data-access/prisma/schema.prisma"
+      }
+    },
+    "db-migrate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma migrate dev --schema=libs/shared/data-access/prisma/schema.prisma --config=libs/shared/data-access/prisma.config.ts"
+      }
+    },
+    "db-migrate-reset": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma migrate reset --config=libs/shared/data-access/prisma.config.ts"
+      }
+    },
+
+    "db-seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsx libs/shared/data-access/prisma/seed.ts"
+      }
+    }
+  }
+}
