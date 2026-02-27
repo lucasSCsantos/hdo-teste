@@ -2,11 +2,12 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Appointment } from '../../interfaces/appointments.interface';
+import { environment } from '../../../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AppointmentsApi {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:3333/api/appointments';
+  private baseUrl = `${environment.apiBaseUrl}/appointments`;
 
   list(query?: { status?: 'Scheduled' | 'Canceled'; patientId: string; range: Date[] }): Observable<Appointment[]> {
     let params = new HttpParams();

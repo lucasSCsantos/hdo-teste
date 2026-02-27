@@ -1,248 +1,221 @@
-PROJETO DE TESTE TÉCNICO
+# 🧪 Teste Técnico — Nx Monorepo
+
+![Nx](https://img.shields.io/badge/Nx-Monorepo-blue)
+![Node](https://img.shields.io/badge/Node.js-20-green)
+![Angular](https://img.shields.io/badge/Angular-Frontend-red)
+![Docker](https://img.shields.io/badge/Docker-Ready-blue)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue)
+![MongoDB](https://img.shields.io/badge/MongoDB-7-green)
+
+> Projeto de teste técnico para **Hospital da Obesidade** utilizando **Nx Monorepo**, contendo backend e frontend totalmente dockerizados para execução simples.
 
 ---
 
-README do Projeto Monorepo Nx
+## 📌 Visão Geral
 
-Documentação para Execução e Desenvolvimento
+Este projeto é um **monorepo Nx** com:
 
-Este documento fornece as instruções necessárias para configurar, executar e testar o projeto de teste técnico, que consiste em um monorepo Nx com aplicações backend e frontend.
+- 🖥️ **Backend:** Node.js + TypeScript (Clean Architecture)  
+- 🌐 **Frontend:** Angular  
+- 🗄️ **Banco de Dados:** PostgreSQL + MongoDB  
+- 🐳 **Infraestrutura:** Docker + Docker Compose  
 
-Data: 2023-10-27 | Versão: 1.0
+> ⚡ O objetivo é permitir que o recrutador execute o projeto com apenas um comando.
 
 ---
 
-## 🚀 Visão Geral do Projeto
+## 🧱 Estrutura
 
-Este projeto é um monorepo gerenciado pelo Nx, contendo duas aplicações principais: um backend e um frontend. O objetivo é demonstrar uma arquitetura modular e a integração entre diferentes tecnologias em um ambiente de desenvolvimento padronizado.
+```text
+apps/
+ ├── backend
+ └── frontend
+libs/
+docker-compose.yml
+.env.example
+```
+
+---
+
+## 🛠️ Stack
 
 ### Backend
-O backend é desenvolvido em Node.js e TypeScript, seguindo uma arquitetura modular com domínios como appointments, audit, auth, patients e procedures. A estrutura de camadas inclui application, domain, infra e presentation. Utiliza Prisma ORM para interagir com um banco de dados PostgreSQL e Mongoose ODM para interagir com MongoDB.
+- Node.js + TypeScript  
+- Prisma (PostgreSQL)  
+- Mongoose (MongoDB)  
+- Arquitetura modular por domínio
 
 ### Frontend
-O frontend é uma aplicação Angular, estruturada com domínios como auth e dashboard dentro de `src/app`.
+- Angular v20 
+- Organização por domínio (auth, dashboard)
 
-## 🛠️ Stack de Tecnologias
+### Infra
+- Docker  
+- Docker Compose  
+- PostgreSQL 16  
+- MongoDB 7  
 
-*   **Monorepo:** Nx
-*   **Backend:**
-    *   Linguagem: Node.js, TypeScript
-    *   ORM/ODM: Prisma (PostgreSQL), Mongoose (MongoDB)
-    *   Banco de Dados: PostgreSQL 16, MongoDB 7
-    *   Container: node:20-alpine
-*   **Frontend:**
-    *   Framework: Angular
-    *   Linguagem: TypeScript
-    *   Container: node:20-alpine
-*   **Orquestração:** Docker Compose v3.9
+---
 
 ## 📋 Pré-requisitos
 
-Para executar este projeto, você precisará ter as seguintes ferramentas instaladas em sua máquina:
+Apenas:
 
-*   **Docker:** Versão 20.10.0 ou superior.
-    *   [Instalação do Docker](https://docs.docker.com/get-docker/)
-*   **Docker Compose:** Versão 2.0.0 ou superior (que utiliza o comando `docker compose` sem o hífen).
-    *   Se você tiver uma versão mais antiga, o comando pode ser `docker-compose`.
+- Docker >= 20  
+- Docker Compose >= 2  
 
-## 🚀 Como Rodar o Projeto
+👉 https://docs.docker.com/get-docker/
 
-Siga os passos abaixo para configurar e iniciar o projeto usando Docker Compose.
+---
 
-### 1. Configuração das Variáveis de Ambiente
+## ⚙️ Variáveis de Ambiente
 
-Crie um arquivo `.env` na raiz do projeto, copiando o conteúdo de `.env.example` (se existir) ou criando-o manualmente. Este arquivo conterá as variáveis de ambiente necessárias para a conexão com os bancos de dados.
-
-Exemplo de `.env` (variáveis obrigatórias):
-
-dotenv
-# Variáveis para o PostgreSQL
-POSTGRES_USER=docker
-POSTGRES_PASSWORD=docker
-POSTGRES_DB=mydatabase
-
-# Variáveis para o MongoDB (opcional, Mongoose pode usar uma URI completa)
-MONGO_INITDB_ROOT_USERNAME=root
-MONGO_INITDB_ROOT_PASSWORD=root
-MONGO_DB=mydatabase
-
-# URI de conexão do Prisma (para o backend)
-DATABASE_URL="postgresql://docker:docker@postgres:5432/mydatabase?schema=public"
-
-# URI de conexão do Mongoose (para o backend)
-MONGO_URI="mongodb://root:root@mongo:27017/mydatabase?authSource=admin"
-
-# Variáveis de ambiente para o backend (ex: JWT_SECRET)
-JWT_SECRET=supersecretjwtkey
-
-*   Certifique-se de que as variáveis `POSTGRES_USER`, `POSTGRES_PASSWORD` e `POSTGRES_DB` estejam configuradas conforme o `docker-compose.yml`.
-*   As variáveis `DATABASE_URL` e `MONGO_URI` são cruciais para o backend se conectar aos bancos de dados.
-
-### 2. Iniciar os Serviços com Docker Compose
-
-Navegue até a raiz do projeto no seu terminal e execute o seguinte comando:
+Copie o arquivo:
 
 ```bash
-docker compose up -d --build
+cp .env.example .env
 ```
 
-*   `docker compose up`: Inicia os serviços definidos no `docker-compose.yml`.
-*   `-d`: Executa os containers em modo *detached* (em segundo plano).
-*   `--build`: Força a reconstrução das imagens dos serviços (backend e frontend), garantindo que as últimas alterações de código sejam incluídas.
+Conteúdo do `.env.example`:
 
-Este comando irá:
-1.  Construir as imagens Docker para o backend e frontend.
-2.  Iniciar os serviços de PostgreSQL, MongoDB, backend e frontend.
-3.  Dentro do container do backend, executar:
-    *   `npm ci`: Instala as dependências do projeto.
-    *   `npx nx run data-access:db-generate`: Gera o cliente Prisma.
-    *   `npx nx run data-access:db-migrate`: Aplica as migrações do banco de dados.
-    *   `npx nx run data-access:db-seed`: Popula o banco de dados com dados iniciais (se configurado).
-    *   `npx nx serve backend`: Inicia o servidor backend.
-4.  Dentro do container do frontend, executar:
-    *   `npm ci`: Instala as dependências do projeto.
-    *   `npx nx serve frontend`: Inicia a aplicação frontend.
+```env
+POSTGRES_USER=your_db_user
+POSTGRES_PASSWORD=your_db_password
+POSTGRES_DB=your_db_name
 
-### 3. Acompanhar os Logs
+BACKEND_PORT=3333
+FRONTEND_PORT=4200
 
-Para verificar o status dos serviços e acompanhar a inicialização, você pode usar:
+MONGO_DB=your_mongo_db_name
 
-```bash
-docker compose logs -f
+POSTGRES_URL=postgres://postgres:postgres@localhost:5432/your_db_name
+MONGO_URL=mongodb://localhost:27017/your_mongo_db_name
+
+JWT_SECRET=your_jwt_secret
 ```
 
-Pressione `Ctrl+C` para sair do modo de acompanhamento de logs sem parar os containers.
+Copie para `.env` e preencha.
 
-## 🌐 Endereços de Acesso
+---
 
-Após a inicialização bem-sucedida, você poderá acessar as aplicações nos seguintes endereços:
+## 🚀 Como Executar
 
-*   **Frontend:** http://localhost:4200
-*   **Backend (API):** http://localhost:3333
-*   **PostgreSQL:** Acessível internamente no Docker na porta 5432. Para acesso externo, verifique a configuração de portas no `docker-compose.yml`.
-*   **MongoDB:** Acessível internamente no Docker na porta 27017. Para acesso externo, verifique a configuração de portas no `docker-compose.yml`.
-
-## ⚙️ Comandos Úteis do Docker Compose
-
-*   **Parar os serviços:**
-    ```bash
-    docker compose down
-    ```
-*   **Parar os serviços e remover volumes (limpar dados do banco):**
-    ```bash
-    docker compose down -v
-    ```
-    *Cuidado: Este comando removerá todos os dados persistidos nos volumes dos bancos de dados.*
-*   **Reconstruir e reiniciar os serviços (útil após alterações no Dockerfile ou `docker-compose.yml`):**
-    ```bash
-    docker compose up -d --build
-    ```
-*   **Executar um comando dentro de um container (ex: acessar o bash do backend):**
-    ```bash
-    docker compose exec backend bash
-    ```
-    *Substitua `backend` pelo nome do serviço desejado (ex: `frontend`, `postgres`, `mongo`).*
-
-## 🧪 Testes
-
-Você pode executar os testes do projeto tanto dentro dos containers quanto localmente, se tiver as dependências instaladas.
-
-### Executando Testes Dentro dos Containers
-
-Para executar os testes de um serviço específico (ex: backend ou frontend) dentro do seu respectivo container:
+Na raiz do projeto:
 
 ```bash
-# Para o backend
+docker compose up
+```
+
+Docker irá automaticamente:
+
+- Subir PostgreSQL e MongoDB  
+- Instalar dependências  
+- Rodar migrations  
+- Iniciar backend  
+- Iniciar frontend  
+
+Nenhum outro comando é necessário.
+
+---
+
+## 🌐 Acesso
+
+- Frontend:  
+  👉 http://localhost:4200  
+
+- Backend:  
+  👉 http://localhost:3333  
+
+---
+
+## 🧪 Testes (Opcional)
+
+O backend foi desenvolvido com TDD.
+
+```bash
 docker compose exec backend npx nx test backend
-
-# Para o frontend
-docker compose exec frontend npx nx test frontend
 ```
 
-### Executando Testes Localmente (Requer Node.js e Nx CLI instalados)
+---
 
-Se você tiver o Node.js (v20 ou superior) e o Nx CLI instalados globalmente, e as dependências do projeto instaladas (`npm install` na raiz), você pode rodar os testes localmente:
+## 🗂 Arquitetura do Backend
+
+Cada módulo segue um modelo Clean Architecture reduzido:
+
+```text
+appointments/
+ ├── application
+ ├── domain
+ ├── infra
+ └── presentation
+```
+
+Domínios:
+- appointments  
+- audit  
+- auth  
+- patients  
+- procedures  
+
+---
+
+## 💾 Banco de Dados
+
+- PostgreSQL: dados relacionais  
+- MongoDB: logs de auditoria  
+- Dados persistem via volumes Docker  
+
+Para resetar:
 
 ```bash
-# Instalar dependências (se ainda não o fez)
-npm install
-
-# Para o backend
-npx nx test backend
-
-# Para o frontend
-npx nx test frontend
+docker compose down -v
+docker compose up
 ```
 
-## 📁 Estrutura de Pastas
+---
 
-Abaixo está uma visão resumida da estrutura de pastas do monorepo, focando nas aplicações principais e na arquitetura modular do backend:
+## ⚠️ Problemas Comuns
 
-```
-.
-├── apps/
-│   ├── backend/
-│   │   ├── src/
-│   │   │   ├── main.ts
-│   │   │   └── app/
-│   │   │       ├── modules/
-│   │   │       │   ├── appointments/  # Módulo de agendamentos
-│   │   │       │   │   ├── application/
-│   │   │       │   │   ├── domain/
-│   │   │       │   │   ├── infra/
-│   │   │       │   │   └── presentation/
-│   │   │       │   ├── audit/         # Módulo de auditoria
-│   │   │       │   ├── auth/          # Módulo de autenticação
-│   │   │       │   ├── patients/      # Módulo de pacientes
-│   │   │       │   └── procedures/    # Módulo de procedimentos
-│   │   │       └── ... (outros arquivos da aplicação)
-│   │   ├── Dockerfile
-│   │   └── project.json
-│   └── frontend/
-│       ├── src/
-│       │   ├── main.ts
-│       │   ├── app/
-│       │   │   ├── domain/
-│       │   │   │   ├── auth/        # Módulo de autenticação
-│       │   │   │   └── dashboard/   # Módulo de dashboard
-│       │   │   └── ... (outros arquivos da aplicação)
-│       │   └── ...
-│       ├── Dockerfile
-│       └── project.json
-├── libs/            # Bibliotecas compartilhadas entre apps (se houver)
-├── .env.example
-├── docker-compose.yml
-├── nx.json
-├── package.json
-└── tsconfig.base.json
+### Porta ocupada
+Edite no `.env`:
+
+```env
+BACKEND_PORT=3334
+FRONTEND_PORT=4300
 ```
 
-## 📝 Observações Importantes
+⚠️ Para isso é necessário alterar a rota da api em frontend/src/environment/environment.ts também.
 
-*   **Inicialização do Banco de Dados:** O `docker-compose.yml` está configurado para que, na inicialização do serviço `backend`, ele execute automaticamente os comandos `npx nx run data-access:db-generate`, `npx nx run data-access:db-migrate` e `npx nx run data-access:db-seed`. Isso garante que o esquema do banco de dados seja criado e populado com dados iniciais a cada *build* ou *restart* do container do backend.
-*   **Persistência de Dados:** Os serviços de banco de dados (PostgreSQL e MongoDB) utilizam volumes Docker para persistir seus dados. Isso significa que, mesmo que você pare e inicie os containers, os dados do banco serão mantidos. Para remover completamente os dados e iniciar com um banco limpo, use o comando `docker compose down -v`.
+### Rebuild
+```bash
+docker compose up --build
+```
 
-## ⚠️ Troubleshooting
+---
 
-Se você encontrar problemas ao executar o projeto, verifique as seguintes soluções comuns:
+## ✅ Execução Rápida
 
-*   **Portas Ocupadas:**
-    *   Se você receber um erro como "port already in use", significa que as portas 3333 (backend) ou 4200 (frontend) já estão sendo usadas por outro processo em sua máquina.
-    *   Solução: Identifique e encerre o processo que está usando a porta ou altere as portas no `docker-compose.yml` e no código da aplicação, se necessário.
-        *   No Linux/macOS: `sudo lsof -i :`
-        *   No Windows: `netstat -ano | findstr :` e depois `taskkill /PID  /F`
-*   **Permissões de Arquivo:**
-    *   Problemas de permissão podem ocorrer ao montar volumes ou ao Docker tentar criar arquivos.
-    *   Solução: Verifique se o usuário que executa o Docker tem as permissões adequadas para os diretórios do projeto. Em alguns casos, pode ser necessário executar o Docker com `sudo` ou ajustar as permissões dos diretórios.
-*   **Volumes de `node_modules`:**
-    *   Se você estiver montando o diretório do projeto como um volume e tiver um `node_modules` local, isso pode causar conflitos com as dependências instaladas dentro do container.
-    *   Solução: Certifique-se de que o `docker-compose.yml` está configurado para usar um volume nomeado ou um volume anônimo para `node_modules` dentro do container, ou adicione `node_modules` ao `.dockerignore` e `.gitignore`. O `npm ci` dentro do container deve garantir que as dependências corretas sejam instaladas para o ambiente do container.
-*   **Reset do Banco de Dados:**
-    *   Se precisar resetar completamente o estado dos bancos de dados (PostgreSQL e MongoDB), use o comando:
-        ```bash
-        docker compose down -v
-        docker compose up -d --build
-        ```
-    *   Este comando irá remover os volumes de dados e recriar os bancos do zero, aplicando as migrações e o *seed* novamente.
+```bash
+cp .env.example .env
+docker compose up
+```
 
-Fim do Documento
+Abra:
+- http://localhost:4200  
+- http://localhost:3333  
+
+---
+
+## 📄 Observações
+
+Este projeto demonstra:
+
+✔ Nx Monorepo  
+✔ Clean Architecture  
+✔ Backend + Frontend  
+✔ PostgreSQL + MongoDB  
+✔ Ambiente Dockerizado  
+
+---
+
+👨‍💻 Desenvolvido como teste técnico.

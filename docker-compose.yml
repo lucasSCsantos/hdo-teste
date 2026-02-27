@@ -31,7 +31,8 @@ services:
     working_dir: /app
     environment:
       POSTGRES_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
-      MONGO_URL: mongodb://mongodb:27017/hdo_teste_tecnico
+      MONGO_URL: mongodb://mongodb:27017/${MONGO_DB}
+      JWT_SECRET: ${JWT_SECRET}
       NX_DAEMON: true
     volumes:
       - .:/app
@@ -48,7 +49,7 @@ services:
       - postgres
       - mongodb
     ports:
-      - "3333:3333"
+      - "${BACKEND_PORT}:3333"
     env_file:
       - .env
 
@@ -65,7 +66,7 @@ services:
     depends_on:
       - backend
     ports:
-      - "4200:4200"
+      - "${FRONTEND_PORT}:4200"
     env_file:
       - .env
 
