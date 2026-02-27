@@ -7,9 +7,16 @@ export class PrismaAppointmentRepository implements IAppointmentRepository {
   async findConflict(appointment: Appointment) {
     return prisma.appointment.findFirst({
       where: {
-        startTime: { lt: appointment.startTime },
-        endTime: { gt: appointment.startTime },
-        OR: [{ procedureId: appointment.procedureId }, { patientId: appointment.patientId }],
+        AND: [
+          { startTime: { lte: appointment.startTime } },
+          { endTime: { gte: appointment.startTime } },
+          {
+            OR: [{ procedureId: appointment.procedureId }, { patientId: appointment.patientId }],
+          },
+        ],
+        // startTime: { lt: appointment.startTime },
+        // endTime: { gt: appointment.startTime },
+        // OR: [{ procedureId: appointment.procedureId }, { patientId: appointment.patientId }],
       },
     });
   }

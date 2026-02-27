@@ -13,7 +13,7 @@ export class AuthInterceptor implements HttpInterceptor {
   private refreshSubject = new BehaviorSubject<string | null>(null);
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const isAuthEndpoint = req.url.includes('/login') || req.url.includes('/refresh') || req.url.includes('/logout') || req.url.includes('/me');
+    const isAuthEndpoint = req.url.includes('/login') || req.url.includes('/refresh') || req.url.includes('/logout');
 
     const token = this.authService.authToken() || localStorage.getItem(ACCESS_TOKEN_KEY);
 

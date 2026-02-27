@@ -61,7 +61,7 @@ export class CreateAppointmentUseCase {
 
       return appointment;
     } catch (err) {
-      throw new AppError('Failed to create appointment', 500);
+      throw new AppError(`Failed to create appointment.`, 500);
     }
   }
 }
