@@ -1,0 +1,60 @@
+<nz-flex nzVertical nzGap="middle" style="width: 100%">
+  <nz-flex nzGap="small">
+    <button nz-button nzType="primary" (click)="openCreate()">Novo paciente</button>
+  </nz-flex>
+
+  <nz-table [nzData]="items()" [nzLoading]="loading()" [nzFrontPagination]="false" nzShowSizeChanger>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Telefone</th>
+        <th>Documento</th>
+        <th style="width: 160px">Ações</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (row of items(); track row.id) {
+      <tr>
+        <td>{{ row.name }}</td>
+        <td>{{ row.phone || '-' | formatPhone}}</td>
+        <td>{{ row.document || '-' | formatDocument }}</td>
+        <td>
+          <nz-flex nzGap="small">
+            <button nz-button nzType="default" nzSize="small" (click)="openEdit(row)">Editar</button>
+
+            <button nz-button nzDanger nzSize="small" nz-popconfirm nzPopconfirmTitle="Remover este paciente?" (nzOnConfirm)="confirmDelete(row)">Excluir</button>
+          </nz-flex>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </nz-table>
+</nz-flex>
+
+<nz-modal [nzVisible]="isModalOpen()" [nzTitle]="modalTitle()" [nzOkLoading]="isSaving()" (nzOnCancel)="closeModal()" (nzOnOk)="save()" nzOkText="Salvar" nzCancelText="Cancelar">
+  <ng-container *nzModalContent>
+    <form [formGroup]="form" nz-form>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Nome é obrigatório">
+          <nz-form-label [nzRequired]="true">Nome</nz-form-label>
+          <input nz-input formControlName="name" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Telefone precisa ter entre 9 e 14 dígitos">
+          <nz-form-label>Telefone</nz-form-label>
+          <input nz-input formControlName="phone" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Documento precisa ter 11 dígitos">
+          <nz-form-label>Documento</nz-form-label>
+          <input nz-input formControlName="document" />
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

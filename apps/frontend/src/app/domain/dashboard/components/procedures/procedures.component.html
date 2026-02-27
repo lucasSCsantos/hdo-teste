@@ -1,0 +1,51 @@
+<nz-flex nzVertical nzGap="middle" style="width: 100%">
+  <nz-flex nzGap="small">
+    <button nz-button nzType="primary" (click)="openCreate()">Novo procedimento</button>
+  </nz-flex>
+
+  <nz-table [nzData]="items()" [nzLoading]="loading()" [nzFrontPagination]="false" nzShowSizeChanger>
+    <thead>
+      <tr>
+        <th>Descrição</th>
+        <th>Duração (min)</th>
+        <th style="width: 160px">Ações</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (row of items(); track row.id) {
+      <tr>
+        <td>{{ row.description }}</td>
+        <td>{{ row.durationMin || '-' }}</td>
+        <td>
+          <nz-flex nzGap="small">
+            <button nz-button nzType="default" nzSize="small" (click)="openEdit(row)">Editar</button>
+
+            <button nz-button nzDanger nzSize="small" nz-popconfirm nzPopconfirmTitle="Remover este procedimento?" (nzOnConfirm)="confirmDelete(row)">Excluir</button>
+          </nz-flex>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </nz-table>
+</nz-flex>
+
+<nz-modal [nzVisible]="isModalOpen()" [nzTitle]="modalTitle()" [nzOkLoading]="isSaving()" (nzOnCancel)="closeModal()" (nzOnOk)="save()" nzOkText="Salvar" nzCancelText="Cancelar">
+  <ng-container *nzModalContent>
+    <form [formGroup]="form" nz-form>
+      <nz-form-item>
+        <nz-form-control>
+          <nz-form-label [nzRequired]="true">Descrição</nz-form-label>
+          <input nz-input formControlName="description" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control>
+          <nz-form-label>Duração (em minutos)</nz-form-label>
+          <input type="number" nz-input formControlName="durationMin" />
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>
