@@ -1,7 +1,8 @@
 import { User } from '@hdo-teste-tecnico/shared/data-access';
 import { AppError } from '../../shared/errors/AppError';
+import { IAuthRepository } from '../../modules/auth/domain/repositories/IAuthRepository';
 
-export default class FakeAuthRepository {
+export default class FakeAuthRepository implements IAuthRepository {
   users: User[] = [
     {
       id: 1,
@@ -20,5 +21,20 @@ export default class FakeAuthRepository {
       throw new AppError('Invalid credentials', 401);
     }
     return user;
+  }
+
+  async findById(id: number): Promise<User | null> {
+    const user = this.users.find(u => u.id === id);
+    return user || null;
+  }
+
+  async updateRefreshToken(id: number, refreshToken: string | null): Promise<void> {
+    const userIndex = this.users.findIndex(p => p.id === id);
+
+    if (userIndex === -1) {
+      throw new AppError('user not found', 404);
+    }
+
+    this.users[userIndex] = { ...this.users[userIndex], refreshToken };
   }
 }

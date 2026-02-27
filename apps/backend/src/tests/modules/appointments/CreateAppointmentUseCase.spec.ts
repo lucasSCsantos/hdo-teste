@@ -4,13 +4,15 @@ import { Appointment } from '@hdo-teste-tecnico/shared/data-access';
 import FakeProcedureRepository from '../../fakes/fakeProcedureRepository';
 import { AppError } from '../../../shared/errors/AppError';
 import FakeAuditLogRepository from '../../fakes/fakeAuditLogRepository';
+import FakePatientRepository from '../../fakes/fakePatientRepository';
 
 describe('CreateAppointmentUseCase', () => {
   it('should create appointment if no conflict', async () => {
     const repo = new FakeAppointmentRepository();
     const procedureRepo = new FakeProcedureRepository();
+    const patientRepo = new FakePatientRepository();
     const auditRepo = new FakeAuditLogRepository();
-    const useCase = new CreateAppointmentUseCase(repo as any, procedureRepo as any, auditRepo as any);
+    const useCase = new CreateAppointmentUseCase(repo as any, procedureRepo as any, patientRepo as any, auditRepo as any);
 
     const newAppointment: Partial<Appointment> = {
       patientId: 1,
@@ -26,8 +28,9 @@ describe('CreateAppointmentUseCase', () => {
   it('should create appointment if no conflict and create audit', async () => {
     const repo = new FakeAppointmentRepository();
     const procedureRepo = new FakeProcedureRepository();
+    const patientRepo = new FakePatientRepository();
     const auditRepo = new FakeAuditLogRepository();
-    const useCase = new CreateAppointmentUseCase(repo as any, procedureRepo as any, auditRepo as any);
+    const useCase = new CreateAppointmentUseCase(repo as any, procedureRepo as any, patientRepo as any, auditRepo as any);
 
     const newAppointment: Partial<Appointment> = {
       patientId: 1,
@@ -43,8 +46,9 @@ describe('CreateAppointmentUseCase', () => {
   it('should not allow conflict', async () => {
     const repo = new FakeAppointmentRepository();
     const procedureRepo = new FakeProcedureRepository();
+    const patientRepo = new FakePatientRepository();
     const auditRepo = new FakeAuditLogRepository();
-    const useCase = new CreateAppointmentUseCase(repo as any, procedureRepo as any, auditRepo as any);
+    const useCase = new CreateAppointmentUseCase(repo as any, procedureRepo as any, patientRepo as any, auditRepo as any);
 
     const newAppointment1: Partial<Appointment> = {
       patientId: 1,

@@ -2,7 +2,16 @@ import { Patient } from '@hdo-teste-tecnico/shared/data-access';
 import { AppError } from '../../shared/errors/AppError';
 
 export default class FakePatientRepository {
-  patients: Patient[] = [];
+  patients: Patient[] = [
+    {
+      createdAt: new Date(),
+      document: '123456789',
+      id: 1,
+      name: 'John Doe',
+      phone: '71981551140',
+      updatedAt: new Date(),
+    },
+  ];
 
   async create(data: any) {
     this.patients.push({

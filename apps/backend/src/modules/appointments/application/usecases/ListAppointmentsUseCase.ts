@@ -4,10 +4,10 @@ import { IAppointmentRepository } from '../../domain/repositories/IAppointmentRe
 export class ListAppointmentsUseCase {
   constructor(private repo: IAppointmentRepository) {}
 
-  async execute(query: { status?: AppointmentStatus; patientId?: string; startDate: Date; endDate: Date }) {
+  async execute(query?: { status?: AppointmentStatus; patientId?: string; startDate: Date; endDate: Date }) {
     let appointments;
 
-    if (query.status || query.patientId || (query.startDate && query.endDate)) {
+    if (query?.status || query?.patientId || (query?.startDate && query?.endDate)) {
       appointments = await this.repo.listQuery(query);
     } else {
       appointments = await this.repo.list();

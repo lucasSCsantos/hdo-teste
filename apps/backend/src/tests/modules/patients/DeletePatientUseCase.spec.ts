@@ -37,7 +37,7 @@ describe('DeletePatientUseCase', () => {
 
     await useCase.execute(result1);
 
-    const remainingPatient = await repo.findById(2);
+    const remainingPatient = await repo.findById(3);
     expect(remainingPatient?.id).toEqual(result2.id);
   });
 });

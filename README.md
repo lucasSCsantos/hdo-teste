@@ -68,6 +68,17 @@ Apenas:
 
 ---
 
+# 🚀 Rodando o projeto
+
+
+## 📥 Clonar o Repositório
+
+```bash
+git clone git@github.com:lucasSCsantos/hdo-teste.git
+
+cd hdo-teste
+```
+
 ## ⚙️ Variáveis de Ambiente
 
 Copie o arquivo:
@@ -96,7 +107,6 @@ JWT_SECRET=secret123
 
 Copie para `.env`
 
----
 
 ## 🚀 Como Executar
 
@@ -135,6 +145,17 @@ O backend foi desenvolvido com TDD.
 ```bash
 docker compose exec backend npx nx test backend
 ```
+
+## 👤 Usuário para Teste
+
+Já existe um usuário pré-cadastrado para facilitar os testes da aplicação:
+
+**Usuário ADMIN:**
+
+- 📧 Email: `admin@hospital.local`  
+- 🔑 Senha: `Senha@123`
+
+> Utilize este usuário para acessar o sistema e validar as funcionalidades administrativas sem necessidade de criar um novo cadastro.
 
 ---
 
