@@ -44,14 +44,14 @@
 
       <nz-form-item>
         <nz-form-control nzErrorTip="Telefone precisa ter entre 9 e 14 dígitos">
-          <nz-form-label>Telefone</nz-form-label>
+          <nz-form-label [nzRequired]="true">Telefone</nz-form-label>
           <input nz-input formControlName="phone" />
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
         <nz-form-control nzErrorTip="Documento precisa ter 11 dígitos">
-          <nz-form-label>Documento</nz-form-label>
+          <nz-form-label [nzRequired]="true">Documento</nz-form-label>
           <input nz-input formControlName="document" />
         </nz-form-control>
       </nz-form-item>
