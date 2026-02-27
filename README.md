@@ -234,6 +234,20 @@ Abra:
 
 ---
 
+## 📮 Como Usar o Postman
+
+Este projeto já inclui uma coleção do Postman pronta para testar toda a API.
+
+A coleção está localizada em:
+
+```text
+postman/
+ ├── HDO.postman_collection.json
+ └── HDOEnvironment.postman_environment.json
+ ```
+
+---
+
 ## 📄 Observações
 
 Este projeto demonstra:
