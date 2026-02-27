@@ -191,7 +191,7 @@ lsof -i :4200
 lsof -i :3333
 ```
 
-⚠️ Para isso é necessário alterar a rota da api em frontend/src/environment/environment.ts também.
+⚠️ Se alterar no `.env` é necessário alterar a rota da api em `frontend/src/environment/environment.ts` também.
 
 ### Rebuild
 ```bash
