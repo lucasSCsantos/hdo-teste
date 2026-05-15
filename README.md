@@ -1,3 +1,4 @@
+
 # 🧪 Teste Técnico — Nx Monorepo
 
 ![Nx](https://img.shields.io/badge/Nx-Monorepo-blue)
