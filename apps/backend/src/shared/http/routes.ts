@@ -7,7 +7,7 @@ import { makeCreatePatientController, makeDeletePatientController, makeListPatie
 
 import { makeCreateProcedureController, makeDeleteProcedureController, makeListProceduresController, makeUpdateProceduresController } from '../container/makeProcedures';
 
-import { makeGetUserController, makeLoginController, makeRefreshController } from '../container/makeAuth';
+import { makeGetUserController, makeLoginController, makeRefreshController, makeConnectGoogleCalendarController, makeGoogleAuthUrlController } from '../container/makeAuth';
 import { makeListAuditController } from '../container/makeAudit';
 
 const routes = Router();
@@ -15,11 +15,16 @@ const routes = Router();
 const loginController = makeLoginController();
 const refreshController = makeRefreshController();
 const getUserController = makeGetUserController();
+const connectGoogleCalendarController = makeConnectGoogleCalendarController();
+const googleAuthUrlController = makeGoogleAuthUrlController();
 
 routes.post('/login', loginController.handle);
 routes.post('/refresh', refreshController.handle);
 
 routes.get('/me', isAuthenticated, getUserController.handle);
+
+routes.get('/auth/google/auth-url', isAuthenticated, googleAuthUrlController.handle);
+routes.post('/auth/google/callback', isAuthenticated, connectGoogleCalendarController.handle);
 
 const createAppointmentController = makeCreateAppointmentController();
 const listAppointmentsController = makeListAppointmentsController();

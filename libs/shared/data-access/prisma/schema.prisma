@@ -14,13 +14,16 @@ datasource db {
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  email        String        @unique
-  password     String
-  name         String
-  refreshToken String?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  id                  Int           @id @default(autoincrement())
+  email               String        @unique
+  password            String
+  name                String
+  refreshToken        String?
+  googleRefreshToken  String?       // OAuth refresh token for Google Calendar
+  timezone            String?       // User's timezone (e.g., "America/New_York")
+  googleSyncEnabled   Boolean       @default(true)
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
 
   @@map("users")
 }
@@ -55,6 +58,7 @@ model Appointment {
   endTime         DateTime   // startTime + durationMin
   status          String     @default("SCHEDULED") // SCHEDULED, CANCELED
   cancellationReason String? // Obrigatório se cancelado
+  googleEventId   String?    // ID do evento no Google Calendar, opcional
 
   patient         Patient    @relation(fields: [patientId], references: [id])
   procedure       Procedure  @relation(fields: [procedureId], references: [id])

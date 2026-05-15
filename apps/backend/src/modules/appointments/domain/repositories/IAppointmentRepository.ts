@@ -14,4 +14,5 @@ export interface IAppointmentRepository {
       include: { patient: true; procedure: true };
     }>[]
   >;
+  updateGoogleEventId(id: number, googleEventId: string): Promise<Appointment | null>;
 }

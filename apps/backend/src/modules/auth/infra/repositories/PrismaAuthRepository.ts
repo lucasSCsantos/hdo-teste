@@ -29,4 +29,27 @@ export class PrismaAuthRepository implements IAuthRepository {
       data: { refreshToken },
     });
   }
+
+  async updateGoogleRefreshToken(id: number, refreshToken: string): Promise<void> {
+    await prisma.user.update({
+      where: { id: +id },
+      data: { googleRefreshToken: refreshToken },
+    });
+  }
+
+  async updateUserTimezone(id: number, timezone: string): Promise<void> {
+    await prisma.user.update({
+      where: { id: +id },
+      data: { timezone },
+    });
+  }
+
+  async getGoogleRefreshToken(id: number): Promise<string | null> {
+    const user = await prisma.user.findUnique({
+      where: { id: +id },
+      select: { googleRefreshToken: true },
+    });
+
+    return user?.googleRefreshToken || null;
+  }
 }

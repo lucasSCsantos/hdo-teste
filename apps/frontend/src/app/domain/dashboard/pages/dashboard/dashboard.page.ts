@@ -7,16 +7,17 @@ import { DashboardSegmentedOptions } from '../../enums/dashboard.enum';
 import { ProceduresComponent } from '../../components/procedures/procedures.component';
 import { AppointmentsComponent } from '../../components/appointments/appointments.component';
 import { AuditComponent } from '../../components/audit/audit.component';
+import { SettingsComponent } from '../../components/settings/settings.component';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [NzTypographyModule, NzFlexModule, NzSegmentedModule, PatientsComponent, ProceduresComponent, AppointmentsComponent, AuditComponent],
+  imports: [NzTypographyModule, NzFlexModule, NzSegmentedModule, PatientsComponent, ProceduresComponent, AppointmentsComponent, AuditComponent, SettingsComponent],
   templateUrl: './dashboard.page.html',
   styleUrl: './dashboard.page.scss',
 })
 export class DashboardPage {
   selectedOption: DashboardSegmentedOptions = DashboardSegmentedOptions.Appointments;
-  options = [DashboardSegmentedOptions.Appointments, DashboardSegmentedOptions.Patients, DashboardSegmentedOptions.Procedures, DashboardSegmentedOptions.Audit];
+  options = [DashboardSegmentedOptions.Appointments, DashboardSegmentedOptions.Patients, DashboardSegmentedOptions.Procedures, DashboardSegmentedOptions.Audit, 'Settings'];
 
   handleValueChange(e: string | number): void {
     this.selectedOption = e as DashboardSegmentedOptions;

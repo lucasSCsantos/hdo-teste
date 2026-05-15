@@ -748,6 +748,9 @@ export const UserScalarFieldEnum = {
   password: 'password',
   name: 'name',
   refreshToken: 'refreshToken',
+  googleRefreshToken: 'googleRefreshToken',
+  timezone: 'timezone',
+  googleSyncEnabled: 'googleSyncEnabled',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -785,6 +788,7 @@ export const AppointmentScalarFieldEnum = {
   endTime: 'endTime',
   status: 'status',
   cancellationReason: 'cancellationReason',
+  googleEventId: 'googleEventId',
   createdAt: 'createdAt'
 } as const
 
@@ -846,6 +850,13 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
  * Reference to a field of type 'String[]'
  */
 export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 

@@ -4,4 +4,7 @@ export interface IAuthRepository {
   findByEmail(email: string): Promise<User | null>;
   findById(id: number): Promise<User | null>;
   updateRefreshToken(id: number, refreshToken: string | null): Promise<void>;
+  updateGoogleRefreshToken(id: number, refreshToken: string): Promise<void>;
+  updateUserTimezone(id: number, timezone: string): Promise<void>;
+  getGoogleRefreshToken(id: number): Promise<string | null>;
 }

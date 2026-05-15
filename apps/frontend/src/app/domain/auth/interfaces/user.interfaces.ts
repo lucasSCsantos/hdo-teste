@@ -4,6 +4,9 @@ export interface User {
   password: string | null;
   name: string | null;
   refreshToken: string | null;
+  googleRefreshToken?: string | null;
+  timezone?: string | null;
+  googleSyncEnabled?: boolean;
   createdAt: Date | null;
   updatedAt: Date | null;
 }

@@ -8,13 +8,26 @@ import { ListAppointmentsController } from '../../modules/appointments/presentat
 import { ListAppointmentsUseCase } from '../../modules/appointments/application/usecases/ListAppointmentsUseCase';
 import { MongoAuditLogRepository } from '../../modules/audit/infra/repositories/MongooseAuditLogRepository';
 import { PrismaPatientRepository } from '../../modules/patients/infra/repositories/PrismaPatientRepository';
+import { GoogleCalendarEventService } from '../../modules/appointments/infra/services/GoogleCalendarEventService';
+import { PrismaAuthRepository } from '../../modules/auth/infra/repositories/PrismaAuthRepository';
 
 export function makeCreateAppointmentController() {
   const repo = new PrismaAppointmentRepository();
   const procedureRepo = new PrismaProcedureRepository();
   const patientRepo = new PrismaPatientRepository();
   const auditRepo = new MongoAuditLogRepository();
-  const useCase = new CreateAppointmentUseCase(repo as any, procedureRepo as any, patientRepo as any, auditRepo as any);
+  const authRepository = new PrismaAuthRepository();
+  const calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
+  const googleCalendarService = new GoogleCalendarEventService(calendarId);
+
+  const useCase = new CreateAppointmentUseCase(
+    repo as any,
+    procedureRepo as any,
+    patientRepo as any,
+    auditRepo as any,
+    authRepository as any,
+    googleCalendarService as any
+  );
   return new CreateAppointmentController(useCase);
 }
 

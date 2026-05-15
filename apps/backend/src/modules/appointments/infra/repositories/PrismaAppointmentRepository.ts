@@ -29,7 +29,15 @@ export class PrismaAppointmentRepository implements IAppointmentRepository {
         procedureId: data.procedureId,
         startTime: data.startTime,
         endTime: data.endTime,
+        googleEventId: data.googleEventId || null,
       },
+    });
+  }
+
+  async updateGoogleEventId(id: number, googleEventId: string) {
+    return prisma.appointment.update({
+      where: { id },
+      data: { googleEventId },
     });
   }
 
